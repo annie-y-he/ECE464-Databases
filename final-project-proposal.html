@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECE464 Databases Final Project</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('code').forEach((block) => {
+          let lines = block.innerHTML.split('\n').filter(line => line.trim().length > 0);
+          let minPad = Math.min(...lines.map(line => line.length - line.trimStart().length));
+          let regex = new RegExp(`^ {${minPad}}`, 'gm');
+          block.innerHTML = lines.join('\n').replace(regex, '');
+        });
+      });
+    </script>
+    <style>
+      ::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+      }
+      * {
+        overflow-x: hidden;
+        overscroll-behavior: none;
+        padding: 0;
+        margin: 0;
+        user-select: none;
+        font-family: sans-serif;
+        box-sizing: border-box;
+        line-height: 1.2em;
+        scrollbar-width: none;
+      }
+      #slides {
+        overflow-y: scroll;
+        height: 100vh;
+        width: 100vw;
+        scroll-snap-type: y mandatory;
+      }
+      .page {
+        width: 100%;
+        height: 100%;
+        padding: 0 25%;
+        scroll-snap-align: start;
+        border-bottom: 1px dashed black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      code {
+        border-radius: 10px;
+        border: 1px solid lightgrey;
+        background-color: rgb(248, 248, 248);
+        padding: 20px;
+        font-family: 'Courier New', Courier, monospace;
+        white-space: pre;
+        height: fit-content;
+        display: block;
+        margin: 5px 0;
+        scroll-snap-align: start;
+        overflow: scroll;
+      }
+      code u {
+        font-family: 'Courier New', Courier, monospace;
+      }
+      .code {
+        font-family: 'Courier New', Courier, monospace;
+        border: 1px solid lightgrey;
+        background-color: rgb(248, 248, 248);
+        border-radius: 5px;
+        padding: 0 5px;
+      }
+      .tb1 {
+        margin-left: 2rem;
+      }
+      #pg7 {
+        background-image: url('erd.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .multicode {
+        height: 60%;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="slides">
+      <div id="pg1" class="page">
+        <h2>GROUP NAME</h2>
+        <br>
+        <p>DB<b>.jar</b></p>
+        <br>
+        <h2>GROUP MEMBERS</h2>
+        <br>
+        <div>
+          <div><b>J</b>effrey Wong</div>
+          <div><b>A</b>nnie He</div>
+          <div><b>R</b>icky Cui</div>
+        </div>
+        <br>
+        <h2>MEMBER EMAILS</h2>
+        <br>
+        <a href="mailto: annie.he@cooper.edu">annie.he@cooper.edu</a>
+        <a href="mailto: jeffrey.wong@cooper.edu">jeffrey.wong@cooper.edu</a>
+        <a href="mailto: ricky.cui@cooper.edu">ricky.cui@cooper.edu</a>
+      </div>
+      <div id="pg2" class="page">
+        <h2>PROJECT NAME</h2>
+        <br>
+        <div>SQL: Solid Quality Library</div>
+        <br>
+        <h2>DESCRIPTION</h2>
+        <br>
+        <div>SQL (Solid Quality Library) is a <a href="https://en.wikipedia.org/wiki/Digital_library">digital library</a> for <a href="https://en.wikipedia.org/wiki/Ebook">ebooks</a> developed by <a href="https://en.wikipedia.org/wiki/JAR_(file_format)">DB.jar</a>, designed to enhance access to a wide array of digital reading materials across various genres and disciplines. Launched with the aim of democratizing the availability of educational and recreational resources, SQL distinguishes itself with a user-centric design that not only supports online reading but also facilitates <a href="https://en.wikipedia.org/wiki/Cross-platform_software">cross-platform</a> <a href="https://en.wikipedia.org/wiki/Annotation">annotation</a> <a href="https://en.wikipedia.org/wiki/File_synchronization">syncing</a>. The platform encourages community participation by allowing users to upload and manage ebook content, thereby continuously enriching its collection.</div>
+        <br>
+        <h2>PURPOSE</h2>
+        <br>
+        <div>The platform's purpose is to provide an easy-to-use, comprehensive repository of eBooks that supports educational and recreational reading needs. It encourages knowledge sharing and collaboration among users, fostering a vibrant community of readers and contributors.</div>
+      </div>
+      <div id="pg3" class="page">
+        <h2>General Functionality</h2>
+        <br>
+        <b>Database Functionality</b>
+        <div class="tb1"><b>Books:</b> Manages data related to eBooks, including metadata for titles, authors, publication dates, and genres.</div>
+        <div class="tb1"><b>Users:</b> Handles user information, including authentication data, profiles, and preferences.</div>
+        <br>
+        <b>Backend Functionality</b>
+        <div class="tb1"><b>Security:</b> Ensures the application's data and user interactions are secure, managing authentication, authorization, and data protection.</div>
+        <div class="tb1"><b>Serving:</b> Handles the logic and infrastructure needed to serve application content to users, including API management, request routing, and content delivery.</div>
+        <br>
+        <b>Frontend Functionality</b>
+        <div class="tb1"><b>GUI:</b> Focuses on designing and implementing the user interface, ensuring it is intuitive, engaging, and accessible across different devices.</div>
+        <div class="tb1"><b>Online Reading:</b> Provides a rich online reading experience with features that allow users to easily read, navigate, and interact with eBooks.</div>
+        <br>
+        <b>Additional Functionality</b>
+        <div class="tb1"><b>OCR:</b> Converts images of text within eBooks into searchable and editable text, enhancing accessibility and functionality.</div>
+        <div class="tb1"><b>Annotation:</b> Enables users to add personal notes, highlights, and bookmarks to eBooks, facilitating a more interactive reading experience.</div>
+        <div class="tb1"><b>Social:</b> Integrates features that allow users to share books, annotations, or reading lists with others, promoting community engagement.</div>
+        <div class="tb1"><b>Recommendation:</b> Utilizes user data to suggest relevant eBooks, enhancing content discoverability and personalizing the user experience.</div>
+        <div class="tb1"><b>Collection:</b> Allows users to organize eBooks into personalized collections or lists, making it easier to manage and access preferred content.</div>
+      </div>
+      <div id="pg4" class="page">
+        <h2>Types of Users</h2>
+        <br>
+        <p><b>Reader:</b> Can read, collect, annotate books.</p>
+        <p><b>Contributor:</b> In addition to readers, contributors can upload eBooks and manage (delete, modify metadata) their contributions.</p>
+        <p><b>Manager:</b> In addition to contributors, managers can manage all books in the library.</p>
+        <p><b>Administrator:</b> In addition to managers, administrators can assign roles to a specific user.</p>
+        <br>
+        <i>* The default role is Reader. During account creation, a user can request a role, which will be reviewed by an Admin.</i>
+      </div>
+      <div id="pg5" class="page">
+        <h2>User Views</h2>
+        <br>
+        <b>Reader:</b>
+        <div class="tb1"><b>Profile:</b> reviews or alter personal information. See other users' public information.</div>
+        <div class="tb1"><b>Library:</b> able to view all books with the number of editions it has.</div>
+        <div class="tb1"><b>Book:</b> see name and description of a book. And see a list of its publications (cover and edition name), tags, authors, languages</div>
+        <div class="tb1"><b>Publication:</b> still see name, description, tags of the book. Author list adds author specific to this edition. Also shows the path to the actual file</div>
+        <div class="tb1"><b>Collection:</b> see different collections. Public vs private, self vs other. The publications one has annotated.</div>
+        <br>
+        <b>Contributor:</b>
+        <div class="tb1"><b>Upload:</b> see and manage the books one has uploaded</div>
+        <br>
+        <b>Manager:</b>
+        <div class="tb1"><b>Manage:</b> able to edit all metadata.</div>
+        <br>
+        <b>Administrator:</b>
+        <div class="tb1"><b>User:</b> able to see all users and assign them roles.</div>
+      </div>
+      <div id="pg6" class="page">
+        <h2>Data Description</h2>
+        <br>
+        <b>Publication (publication):</b>
+        <div class="tb1">Stores information about publications, such as books or articles.</div>
+        <div class="tb1">Includes fields for the publication ID (pid), International Standard Book Number (isbn), file path (file), edition, number of pages, and cover image.</div>
+        <br>
+        <b>Book (book):</b>
+        <div class="tb1">Contains details about books.</div>
+        <div class="tb1">Stores the book ID (bid), description, and name of the book.</div>
+        <br>
+        <b>Tag (tag):</b>
+        <div class="tb1">Stores tags or labels that can be assigned to books.</div>
+        <div class="tb1">Each tag is uniquely identified by its name (tname).</div>
+        <br>
+        <b>Series (series):</b>
+        <div class="tb1">Contains information about book series.</div>
+        <div class="tb1">Stores the series ID (sid) and name of the series.</div>
+        <br>
+        <b>Author (author):</b>
+        <div class="tb1">Stores information about authors.</div>
+        <div class="tb1">Includes the author ID (aid), name, description, date of birth (dob), and date of death (dod).</div>
+        <br>
+        <b>Publisher (publisher):</b>
+        <div class="tb1">Contains information about publishers.</div>
+        <div class="tb1">Stores the publisher name (pname).</div>
+        <br>
+        <b>Language (language):</b>
+        <div class="tb1">Stores information about languages.</div>
+        <div class="tb1">Each language is uniquely identified by its name (lname).</div>
+        <br>
+        <b>User (user):</b>
+        <div class="tb1">Stores user information for authentication and personalization.</div>
+        <div class="tb1">Includes the user ID (uid), password, date of birth (dob), email, username, first name, and last name.</div>
+        <br>
+        <i>* The database will be populated with data from user input, existing databases, filesystem, etc.</i>
+      </div>
+      <div id="pg7" class="page">
+      </div>
+      <div id="pg8" class="page">
+        <code>
+          Publication (<u>pid</u>: uuid, isbn: text, file: path, ed: text, num_pg: int, cover: path)
+          Book (<u>bid</u>: uuid, description: text, bname: text)
+          pubisbook (<u>bid</u>: uuid, <u>pid</u>: uuid)
+          Tag (<u>tname</u>: text)
+          bookhastag (<u>bid</u>: uuid, <u>tname</u>: text)
+          Series (<u>sid</u>: uuid, sname: text)
+          pubinseries (<u>pid</u>: uuid, <u>sid</u>: uuid, psid: int)
+          Author (<u>aid</u>: uuid, aname: text, description: text, dob: date, dod: date)
+          authwpub (<u>aid</u>: uuid, <u>pid</u>: uuid)
+          authwbook (<u>aid</u>: uuid, <u>bid</u>: uuid)
+          Publisher (<u>pname</u>: text)
+          publishes (pname: text, year: int, <u>pid</u>: uuid)
+          Language (<u>lname</u>: text)
+          pubinlang (<u>pid</u>: uuid, <u>lname</u>: text)
+          authwlang (<u>aid</u>: uuid, <u>lname</u>: text)
+          User (<u>uid</u>: uuid, pword: text, dob: date, email: text, uname: text, first: text, last: text)
+          userannopub (<u>uid</u>: uuid, <u>pid</u>: uuid, file: path)
+          useruppub (<u>uid</u>: uuid, <u>pid</u>: uuid)
+          userfollow (<u>uidER</u>: uuid, <u>uidEE</u>: uuid)
+          userlikelang (<u>uid</u>: uuid, <u>lname</u>: text)
+          userlikepub (<u>uid</u>: uuid, <u>pid</u>: uuid)
+          userlikebook (<u>uid</u>: uuid, <u>bid</u>: uuid)
+          userlikeauth (<u>uid</u>: uuid, <u>aid</u>: uuid)
+          userliketag (<u>uid</u>: uuid, <u>tname</u>: text)
+          userlikeseries (<u>uid</u>: uuid, <u>sid</u>: uuid)
+        </code>
+      </div>
+      <div id="pg9" class="page">
+        <h2>Before Simplification</h2>
+        <br>
+        <div class="multicode">
+          <code>
+            CREATE TABLE publication (
+              pid uuid DEFAULT uuid_generate_v4 (),
+              isbn char(13),
+              file text NOT NULL,
+              edition text NOT NULL,
+              num_pages integer,
+              cover text,
+              PRIMARY KEY (pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE book (
+              bid uuid DEFAULT uuid_generate_v4 (),
+              description text,
+              bname text NOT NULL,
+              PRIMARY KEY (bid)
+            );
+          </code>
+          <code>
+            CREATE TABLE pubisbook (
+              bid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (bid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE tag (
+              tname text NOT NULL,
+              PRIMARY KEY (tname)
+            );
+          </code>
+          <code>
+            CREATE TABLE bookhastag (
+              bid uuid NOT NULL,
+              tname text NOT NULL,
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              FOREIGN KEY (tname) REFERENCES tag(tname),
+              PRIMARY KEY (bid, tname)
+            );
+          </code>
+          <code>
+            CREATE TABLE series (
+              sid uuid DEFAULT uuid_generate_v4 (),
+              sname text NOT NULL,
+              PRIMARY KEY (sid)
+            );
+          </code>
+          <code>
+            CREATE TABLE pubinseries (
+              pid uuid NOT NULL,
+              sid uuid NOT NULL,
+              psid int,
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              FOREIGN KEY (sid) REFERENCES series(sid),
+              PRIMARY KEY (pid, sid)
+            );
+          </code>
+          <code>
+            CREATE TABLE author (
+              aid uuid DEFAULT uuid_generate_v4 (),
+              aname text NOT NULL,
+              description text,
+              dob date,
+              dod date,
+              PRIMARY KEY (aid)
+            );
+          </code>
+          <code>
+            CREATE TABLE authwpub (
+              aid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (aid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE authwbook (
+              aid uuid NOT NULL,
+              bid uuid NOT NULL,
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              PRIMARY KEY (aid, bid)
+            );
+          </code>
+          <code>
+            CREATE TABLE publisher (
+              pname text NOT NULL,
+              PRIMARY KEY (pname)
+            );
+          </code>
+          <code>
+            CREATE TABLE publishes (
+              pname text NOT NULL,
+              year integer NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              FOREIGN KEY (pname) REFERENCES publisher(pname),
+              PRIMARY KEY (pname, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE language (
+              lname text NOT NULL,
+              PRIMARY KEY (lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE pubinlang (
+              pid uuid NOT NULL,
+              lname text NOT NULL,
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              FOREIGN KEY (lname) REFERENCES language(lname),
+              PRIMARY KEY (pid, lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE authwlang (
+              aid uuid NOT NULL,
+              lname text NOT NULL,
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              FOREIGN KEY (lname) REFERENCES language(lname),
+              PRIMARY KEY (aid, lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE user (
+              uid uuid DEFAULT uuid_generate_v4 (),
+              password text,
+              dob date,
+              email text,
+              uname text,
+              first_name text,
+              last_name text,
+              PRIMARY KEY (uid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userannopub (
+              uid uuid NOT NULL,
+              pid uuid NOT NULL,
+              file text,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (uid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE useruppub (
+              uid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (uid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userfollow (
+              uidER uuid NOT NULL,
+              uidEE uuid NOT NULL,
+              FOREIGN KEY (uidER) REFERENCES user(uid),
+              FOREIGN KEY (uidEE) REFERENCES user(uid),
+              PRIMARY KEY (uidER, uidEE)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikelang (
+              uid uuid NOT NULL,
+              lname text NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (lname) REFERENCES language(lname),
+              PRIMARY KEY (uid, lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikepub (
+              uid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (uid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikebook (
+              uid uuid NOT NULL,
+              bid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              PRIMARY KEY (uid, bid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikeauth (
+              uid uuid NOT NULL,
+              aid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              PRIMARY KEY (uid, aid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userliketag (
+              uid uuid NOT NULL,
+              tname text NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (tname) REFERENCES tag(tname),
+              PRIMARY KEY (uid, tname)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikeseries (
+              uid uuid NOT NULL,
+              sid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (sid) REFERENCES series(sid),
+              PRIMARY KEY (uid, sid)
+            );
+          </code>
+        </div>
+      </div>
+      <div id="pg10" class="page">
+        <h2>[placeholder] Simplified</h2>
+        <br>
+        <div class="multicode">
+          <code>
+            CREATE TABLE publication (
+              pid uuid DEFAULT uuid_generate_v4 (),
+              isbn char(13),
+              file text NOT NULL,
+              edition text NOT NULL,
+              num_pages integer,
+              cover text,
+              PRIMARY KEY (pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE book (
+              bid uuid DEFAULT uuid_generate_v4 (),
+              description text,
+              bname text NOT NULL,
+              PRIMARY KEY (bid)
+            );
+          </code>
+          <code>
+            CREATE TABLE pubisbook (
+              bid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (bid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE tag (
+              tname text NOT NULL,
+              PRIMARY KEY (tname)
+            );
+          </code>
+          <code>
+            CREATE TABLE bookhastag (
+              bid uuid NOT NULL,
+              tname text NOT NULL,
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              FOREIGN KEY (tname) REFERENCES tag(tname),
+              PRIMARY KEY (bid, tname)
+            );
+          </code>
+          <code>
+            CREATE TABLE series (
+              sid uuid DEFAULT uuid_generate_v4 (),
+              sname text NOT NULL,
+              PRIMARY KEY (sid)
+            );
+          </code>
+          <code>
+            CREATE TABLE pubinseries (
+              pid uuid NOT NULL,
+              sid uuid NOT NULL,
+              psid int,
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              FOREIGN KEY (sid) REFERENCES series(sid),
+              PRIMARY KEY (pid, sid)
+            );
+          </code>
+          <code>
+            CREATE TABLE author (
+              aid uuid DEFAULT uuid_generate_v4 (),
+              aname text NOT NULL,
+              description text,
+              dob date,
+              dod date,
+              PRIMARY KEY (aid)
+            );
+          </code>
+          <code>
+            CREATE TABLE authwpub (
+              aid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (aid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE authwbook (
+              aid uuid NOT NULL,
+              bid uuid NOT NULL,
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              PRIMARY KEY (aid, bid)
+            );
+          </code>
+          <code>
+            CREATE TABLE publisher (
+              pname text NOT NULL,
+              PRIMARY KEY (pname)
+            );
+          </code>
+          <code>
+            CREATE TABLE publishes (
+              pname text NOT NULL,
+              year integer NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              FOREIGN KEY (pname) REFERENCES publisher(pname),
+              PRIMARY KEY (pname, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE language (
+              lname text NOT NULL,
+              PRIMARY KEY (lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE pubinlang (
+              pid uuid NOT NULL,
+              lname text NOT NULL,
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              FOREIGN KEY (lname) REFERENCES language(lname),
+              PRIMARY KEY (pid, lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE authwlang (
+              aid uuid NOT NULL,
+              lname text NOT NULL,
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              FOREIGN KEY (lname) REFERENCES language(lname),
+              PRIMARY KEY (aid, lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE user (
+              uid uuid DEFAULT uuid_generate_v4 (),
+              password text,
+              dob date,
+              email text,
+              uname text,
+              first_name text,
+              last_name text,
+              PRIMARY KEY (uid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userannopub (
+              uid uuid NOT NULL,
+              pid uuid NOT NULL,
+              file text,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (uid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE useruppub (
+              uid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (uid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userfollow (
+              uidER uuid NOT NULL,
+              uidEE uuid NOT NULL,
+              FOREIGN KEY (uidER) REFERENCES user(uid),
+              FOREIGN KEY (uidEE) REFERENCES user(uid),
+              PRIMARY KEY (uidER, uidEE)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikelang (
+              uid uuid NOT NULL,
+              lname text NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (lname) REFERENCES language(lname),
+              PRIMARY KEY (uid, lname)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikepub (
+              uid uuid NOT NULL,
+              pid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (pid) REFERENCES publication(pid),
+              PRIMARY KEY (uid, pid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikebook (
+              uid uuid NOT NULL,
+              bid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (bid) REFERENCES book(bid),
+              PRIMARY KEY (uid, bid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikeauth (
+              uid uuid NOT NULL,
+              aid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (aid) REFERENCES author(aid),
+              PRIMARY KEY (uid, aid)
+            );
+          </code>
+          <code>
+            CREATE TABLE userliketag (
+              uid uuid NOT NULL,
+              tname text NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (tname) REFERENCES tag(tname),
+              PRIMARY KEY (uid, tname)
+            );
+          </code>
+          <code>
+            CREATE TABLE userlikeseries (
+              uid uuid NOT NULL,
+              sid uuid NOT NULL,
+              FOREIGN KEY (uid) REFERENCES user(uid),
+              FOREIGN KEY (sid) REFERENCES series(sid),
+              PRIMARY KEY (uid, sid)
+            );
+          </code>
+        </div>
+        <br>
+        <i>* Addition and removal of weak entities should be done with trigger instead of cascade?</i>
+      </div>
+    </div>
+  </body>
+</html>
