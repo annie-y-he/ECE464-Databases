@@ -19,7 +19,7 @@
         display: none;  /* Safari and Chrome */
       }
       * {
-        overflow-x: hidden;
+        overflow: hidden;
         overscroll-behavior: none;
         padding: 0;
         margin: 0;
@@ -57,6 +57,11 @@
         margin: 5px 0;
         scroll-snap-align: start;
         overflow: scroll;
+      }
+      @media only screen and (max-width: 600px) {
+        .page {
+          padding: 0 50px;
+        }
       }
       code u {
         font-family: 'Courier New', Courier, monospace;
