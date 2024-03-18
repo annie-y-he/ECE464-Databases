@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: lib
+      POSTGRES_USER: annie
+      POSTGRES_PASSWORD: inkcherry
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/app
+    working_dir: /app
+
+  app:
+    image: node:latest
+    command: bash -c "tail -f /dev/null"
+    ports:
+      - "3000:3000"
+    environment:
+      - "NEXT_WEBPACK_USEPOLLING=1"
+
+    volumes:
+      - ./next:/app
+    working_dir: /app
