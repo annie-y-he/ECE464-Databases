@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  uid         String        @id @default(uuid())
+  password    String
+  dob         DateTime
+  email       String        @unique
+  uname       String
+  image       String?
+  first_name  String
+  last_name   String
+  role        String        @default("reader")
+  userUploads userUploads[]
+  userFollows userFollows[]
+}
+
+model publication {
+  pid           String          @id @default(uuid())
+  isbn          String?         @db.Char(13)
+  file          String
+  edition       String?
+  num_pages     Int
+  cover         String
+  pubInBook     pubInBook[]
+  pubInSeries   pubInSeries[]
+  authWritesPub authWritesPub[]
+  pubPubPub     pubPubPub[]
+  pubInLang     pubInLang[]
+  userUploads   userUploads[]
+}
+
+model book {
+  bid            String           @id @default(uuid())
+  description    String?
+  bname          String
+  pubInBook      pubInBook[]
+  bookHasTag     bookHasTag[]
+  authWritesBook authWritesBook[]
+}
+
+model tag {
+  tid        String       @id @default(uuid())
+  tname      String
+  bookHasTag bookHasTag[]
+}
+
+model series {
+  sid         String        @id @default(uuid())
+  sname       String
+  pubInSeries pubInSeries[]
+}
+
+model author {
+  aid            String           @id @default(uuid())
+  aname          String
+  description    String?
+  dob            DateTime?
+  authWritesPub  authWritesPub[]
+  authWritesBook authWritesBook[]
+}
+
+model publisher {
+  cid       String      @id @default(uuid())
+  pname     String
+  pubPubPub pubPubPub[]
+}
+
+model language {
+  lid       String      @id @default(uuid())
+  lname     String
+  pubInLang pubInLang[]
+}
+
+model pubInBook {
+  bid         String
+  pid         String
+  book        book        @relation(fields: [bid], references: [bid])
+  publication publication @relation(fields: [pid], references: [pid])
+
+  @@id([bid, pid])
+}
+
+model bookHasTag {
+  bid  String
+  tid  String
+  book book   @relation(fields: [bid], references: [bid])
+  tag  tag    @relation(fields: [tid], references: [tid])
+
+  @@id([bid, tid])
+}
+
+model pubInSeries {
+  pid         String
+  sid         String
+  psid        Int?
+  publication publication @relation(fields: [pid], references: [pid])
+  series      series      @relation(fields: [sid], references: [sid])
+
+  @@id([pid, sid])
+}
+
+model authWritesPub {
+  aid         String
+  pid         String
+  role        String?
+  author      author      @relation(fields: [aid], references: [aid])
+  publication publication @relation(fields: [pid], references: [pid])
+
+  @@id([aid, pid])
+}
+
+model authWritesBook {
+  aid    String
+  bid    String
+  role   String?
+  author author  @relation(fields: [aid], references: [aid])
+  book   book    @relation(fields: [bid], references: [bid])
+
+  @@id([aid, bid])
+}
+
+model pubPubPub {
+  cid         String
+  year        Int
+  pid         String
+  publisher   publisher   @relation(fields: [cid], references: [cid])
+  publication publication @relation(fields: [pid], references: [pid])
+
+  @@id([cid, pid])
+}
+
+model pubInLang {
+  pid         String
+  lid         String
+  publication publication @relation(fields: [pid], references: [pid])
+  language    language    @relation(fields: [lid], references: [lid])
+
+  @@id([pid, lid])
+}
+
+model userUploads {
+  uid         String
+  pid         String
+  user        user        @relation(fields: [uid], references: [uid])
+  publication publication @relation(fields: [pid], references: [pid])
+
+  @@id([uid, pid])
+}
+
+model userFollows {
+  uid  String
+  fid  String
+  type String
+  user user   @relation(fields: [uid], references: [uid])
+
+  @@id([uid, fid, type])
+}

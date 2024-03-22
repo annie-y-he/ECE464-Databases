@@ -10,16 +10,14 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres:/app
+      - ./postgres:/docker-entrypoint-initdb.d
     working_dir: /app
 
   app:
     image: node:latest
-    command: bash -c "tail -f /dev/null"
+    command: bash -c "npx prisma migrate dev --name init && npx prisma db seed && tail -f /dev/null"
     ports:
       - "3000:3000"
-    environment:
-      - "NEXT_WEBPACK_USEPOLLING=1"
 
     volumes:
       - ./next:/app

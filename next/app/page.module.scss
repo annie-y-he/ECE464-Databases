@@ -1,0 +1,67 @@
+.main {
+  width: 100vw;
+  height: 100vh;
+}
+
+.nav {
+  top: 0;
+  padding: 20px;
+  background-color: azure;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+}
+
+.navbtn {
+  background-color: bisque;
+  padding: 10px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: beige;
+  }
+}
+
+.viewer {
+  height: 100%;
+  width: 100%;
+  padding-top: 100px;
+  position: relative;
+}
+
+.flexc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexr {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.full {
+  height: 100%;
+  width: 100%;
+}
+
+.lib {
+  overflow-y: scroll;
+  padding: 50px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.book {
+  background-color: gray;
+  color: black;
+  height: 300px;
+  width: 200px;
+  margin: 10px;
+  text-align: center;
+  color: white;
+}
