@@ -1,85 +1,200 @@
-## Project Goal Summary
+### GROUP NAME
 
-The aim is to develop a comprehensive **Digital Library Platform** with enhanced functionalities to support a dynamic bookshelf experience, facilitate user interaction, and improve content accessibility.
+DB.**jar**
 
-### Core Objectives
+### GROUP MEMBERS
 
-#### 1. **DBMS for Book Management**
-- **Objective:** Implement a robust Database Management System (DBMS) for efficient organization, storage, and retrieval of digital content.
-- **Features:**
-  - Categorization and indexing of books.
-  - Advanced search functionality based on metadata.
+**J**ffrey Wong
+**A**nnie He
+**R**icky Cui
 
-#### 2. **User Account Management**
-- **Objective:** Facilitate a multi-user environment with personalized profiles.
-- **Features:**
-  - Personalized dashboards.
-  - Content upload and management capabilities.
+### MEMBER EMAILS
 
-#### 3. **Content Upload and Management**
-- **Objective:** Enable document upload, with a focus on PDF formats, to enrich the library's offerings.
-- **Features:**
-  - Support for OCR processing of image-based PDFs.
-  - Conversion of scanned documents to searchable text formats.
+- annie.he@cooper.edu
+- jeffrey.wong@cooper.edu
+- ricky.cui@cooper.edu
 
-#### 4. **Integration of OCR Technology**
-- **Objective:** Leverage OCR technology for converting non-searchable, image-based PDFs into searchable and accessible formats.
-- **Technology:** Utilization of PyTesseract or similar OCR tools for text extraction.
+### PROJECT NAME
 
-#### 5. **Integration with ChatGPT for Metadata Search**
-- **Objective:** Implement ChatGPT or similar AI technologies to assist users in searching for book metadata.
-- **Features:**
-  - Natural language processing for improved search results.
-  - Enhanced interaction with digital content through AI-driven queries.
+SQLib: Solid Quality Library
 
-#### 6. **Personalized Annotation**
-- **Objective:** Provide functionality for users to create and save personal annotations within eBooks.
-- **Features:**
-  - User-specific notes and highlights.
-  - Cross-device accessibility of saved annotations.
+### DESCRIPTION
 
-### Tech Stack
+lorem ipsum dolor sit amet, consectetur adipiscing el aspect, sed do eiusmod tempor incididunt ut labore et dolore mag en iacute vel mag et dolore magna aliqua. Ut enim ad minim ven
 
-#### Frontend
+### TECH STACK
 
-- **Vue.js**: A progressive JavaScript framework for building user interfaces. Its ecosystem includes:
-- **Vue Router** for client-side routing.
+- **Next.js**: fullstack framework.
+- **Prisma**: ORM for Node.js.
+- **PostgreSQL**: relational database.
 
-#### Backend
+  #### Additional Tools
 
-- **Python**: Serving as the backend programming language with its vast library support and community. Framework options include:
-  - **Flask**: A lightweight WSGI web application framework, ideal for building RESTful APIs with a minimalistic approach.
+- **Docker**: containerization.
+- **Git**: version control.
 
-#### Database
+  #### To be implemented
 
-- **PostgreSQL**: An open-source relational database system, chosen for its advanced features and reliability. It provides robust support for complex queries and transactions.
+- **AWS EC2/ECS**: cloud hosting.
+- **Apache/Nginx**?: serving.
 
-#### OCR Integration
+### DATABASE MODELS
 
-- **PyTesseract**: A Python library serving as a wrapper for Google’s Tesseract-OCR Engine, used for converting image-based PDFs to searchable text.
+`next/prisma/schema.prisma`
+- primary entity **user**
+```prisma
+// accounts can be logged in with email
+model user {
+  uid         String        @id @default(uuid())
+  password    String
+  dob         DateTime
+  email       String        @unique
+  uname       String
+  image       String?
+  first_name  String
+  last_name   String
+  role        String        @default("reader")
+}
+```
+- primary entity **publication**
+```prisma
+// an edition/version of a book
+model publication {
+  pid           String          @id @default(uuid())
+  isbn          String?
+  file          String
+  edition       String?
+  num_pages     Int
+  cover         String
+}
+```
+- dependent entities **book**, **tag**, **series**, **author**, **publisher**, **language**
+```prisma
+// one or many publications that share name and certain authors
+model book {
+  bid            String           @id @default(uuid())
+  description    String?
+  bname          String
+}
+// a tag can be assigned to a book
+model tag {
+  tid        String       @id @default(uuid())
+  tname      String
+}
+// one or many publications can be in a series
+model series {
+  sid         String        @id @default(uuid())
+  sname       String
+}
+// authors are usually created automatically from unique name, but when duplicated names happen, dob is used
+model author {
+  aid            String           @id @default(uuid())
+  aname          String
+  description    String?
+  dob            DateTime?
+}
+// publishers are created from unique names
+model publisher {
+  cid       String      @id @default(uuid())
+  pname     String
+}
+// languages are assigned to publications
+model language {
+  lid       String      @id @default(uuid())
+  lname     String
+}
+```
+- relationships
+```prisma
+// relationship between publication and book
+model pubInBook {
+  bid         String
+  pid         String
+  @@id([bid, pid])
+}
+// relationship between book and tag
+model bookHasTag {
+  bid  String
+  tid  String
+  @@id([bid, tid])
+}
+// relationship between publication and series
+model pubInSeries {
+  pid         String
+  sid         String
+  psid        Int?
+  @@id([pid, sid])
+}
+// relationship between author and publication
+model authWritesPub {
+  aid         String
+  pid         String
+  role        String?
+  @@id([aid, pid])
+}
+// relationship between author and book
+model authWritesBook {
+  aid    String
+  bid    String
+  role   String?
+  @@id([aid, bid])
+}
+// relationship between publisher and publication
+model pubPubPub {
+  cid         String
+  year        Int
+  pid         String
+  @@id([cid, pid])
+}
+// relationship between publication and language
+model pubInLang {
+  pid         String
+  lid         String
+  @@id([pid, lid])
+}
+// relationship between user and uploaded publications
+model userUploads {
+  uid         String
+  pid         String
+  @@id([uid, pid])
+}
+// relationship between user and anything the user followed
+model userFollows {
+  uid  String
+  fid  String
+  type String
+  @@id([uid, fid, type])
+}
+```
 
-#### AI Integration
+### TYPES OF USERS
 
-- **OpenAI API**: For integrating AI-driven functionalities like metadata search through natural language processing, enhancing user interaction, and content discovery.
+- **reader**: can read books, follow things, and manage self (cannot edit role).
+- **contributor**: in addition to readers, can upload and manage* their own uploads.
+- **manager**: in addition to contributors, can manage other entities (except for user).
+- **admin**: in addition to managers, can manage all users (cannot edit personal fields).
 
-#### Server
+  \* manage: edit or delete  
 
-- **Apache HTTP Server**: Selected for serving the web content. Apache provides robust, scalable, and secure options for web server deployment.
+### FUNCTIONS
 
-#### Additional Tools and Services
+- signIn
+- signOut
+- signUp
 
-- **Docker**: For containerizing the application, ensuring consistency across different development and production environments.
-- **Git**: For version control, using GitHub for repository hosting.
+  #### To be implemented
 
-#### Hosting/Deployment
-
-- **AWS EC2**: Chosen for its flexibility, scalability, and control, EC2 instances will host the application, offering a reliable cloud computing environment.
-
-#### Development Tools
-
-- **Visual Studio Code**: Recommended IDEs for Vue.js and Python development.
-- **Postman**: For testing and developing APIs.
-
-## Database Structure
-
-![alt text](erd.png)
+- deleteSelf
+- deleteUser
+- follow
+- unfollow
+- uploadPub
+- editPub
+- deletePub
+- editSelf
+- editRole
+- getRecommended
+- getFollowed
+- getSearched
+- mergeDep
+- deleteDep

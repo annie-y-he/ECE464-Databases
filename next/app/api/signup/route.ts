@@ -5,8 +5,6 @@ import { NextRequest } from "next/server";
 const prisma = new PrismaClient();
 
 async function signUp(req: NextRequest) {
-
-  // Extract the data from the request body
   const body = await req.json();
   const { email, uname, password, fname, lname, dob } = body;
   const hashedPassword = await bcrypt.hash(password, 10);

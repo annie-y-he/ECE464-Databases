@@ -3,11 +3,9 @@
 import styles from "./page.module.scss";
 import { useState } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
-import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
 
 async function handleSignOut() {
-  const result = await signOut({ redirect: false });
+  await signOut({ redirect: false });
 }
 
 export default function Home() {
@@ -18,8 +16,7 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [dob, setDOB] = useState('');
-  const prisma = new PrismaClient()
-
+  /** signin using nextauth */
   const handleSignIn = async (e: any) => {
     e.preventDefault();
     const result = await signIn('credentials', { 
@@ -34,6 +31,7 @@ export default function Home() {
       console.log(result);
     }
   };
+  /** sends form to server, create user */
   const handleSignUp = async (e: any) => {
     e.preventDefault();
     console.log( JSON.stringify({
