@@ -4,8 +4,8 @@ DB.**jar**
 
 ### GROUP MEMBERS
 
-**J**ffrey Wong
-**A**nnie He
+**J**ffrey Wong  
+**A**nnie He  
 **R**icky Cui
 
 ### MEMBER EMAILS
