@@ -4,7 +4,7 @@ DB.**jar**
 
 ### GROUP MEMBERS
 
-**J**ffrey Wong  
+**J**effrey Wong  
 **A**nnie He  
 **R**icky Cui
 
