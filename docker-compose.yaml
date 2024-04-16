@@ -17,7 +17,7 @@ services:
     image: node:latest
     command: bash -c "npx prisma migrate dev --name init && npx prisma generate && npx prisma db seed && tail -f /dev/null"
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - db
     volumes:
