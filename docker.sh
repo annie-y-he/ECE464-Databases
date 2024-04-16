@@ -6,9 +6,9 @@ PROJECT_NAME="sqlib"
 if [ "$1" = "rm" ]; then
   echo "Stopping and removing containers..."
   sudo docker compose -p $PROJECT_NAME down -v
-elif [ $1 = "db" ]; then
+elif [ "$1" = "db" ]; then
   sudo docker exec -it ${PROJECT_NAME}-db-1 env PGPASSWORD='inkcherry' psql -U annie -d lib
-elif [ $1 = "app" ]; then
+elif [ "$1" = "app" ]; then
   sudo docker exec -it ${PROJECT_NAME}-app-1 bash
 else
   echo "Starting services..."
