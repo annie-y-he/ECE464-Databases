@@ -12,14 +12,14 @@ const nextConfig = {
     // Return the modified config
     return config;
   },
-  async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        destination: "/databases/:path*"  // Rewrite all routes to start with /databases/
-      }
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/:path*",
+  //       destination: "/databases/:path*"
+  //     }
+  //   ];
+  // },
 };
 
 export default nextConfig;
