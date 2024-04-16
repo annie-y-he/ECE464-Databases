@@ -10,6 +10,26 @@ elif [ "$1" = "db" ]; then
   sudo docker exec -it ${PROJECT_NAME}-db-1 env PGPASSWORD='inkcherry' psql -U annie -d lib
 elif [ "$1" = "app" ]; then
   sudo docker exec -it ${PROJECT_NAME}-app-1 bash
+elif [ "$1" = "push" ]; then
+  if [ "$2" ]; then
+    git add .
+    git commit -m "$2"
+    git push
+  else
+    git add .
+    git commit -m "update"
+    git push
+  fi
+  ssh admin@ec2-18-215-72-38.compute-1.amazonaws.com "cd databases && git pull && ./docker.sh restart"
+elif [ "$1" = "restart" ]; then
+  echo "Rebuilding images..."
+  sudo docker compose -p $PROJECT_NAME up -d --build
+  echo "Installing dependencies..."
+  sudo docker exec ${PROJECT_NAME}-app-1 npm install
+  echo "Building the application..."
+  sudo docker exec ${PROJECT_NAME}-app-1 npm run build
+  echo "Restarting container..."
+  sudo docker compose -p $PROJECT_NAME restart
 else
   echo "Starting services..."
   sudo docker compose -p $PROJECT_NAME up -d
