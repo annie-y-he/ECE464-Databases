@@ -3,3 +3,4 @@
 - export as GET as POST.
 - docker-compose is separate
 - change db url for local
+- persist data
