@@ -6,7 +6,7 @@ import { getSession } from "next-auth/react";
 import { SessionProvider } from "next-auth/react"
 
 
-export default function (children: React.ReactNode, pageProps: any) {
+export default function (children: any, pageProps: any) {
   return (
     <SessionProvider session={pageProps.session}>
       <Nav>
