@@ -10,6 +10,7 @@ export default function Nav({
 }: {
   children: React.ReactNode;
 }) {
+  console.log(BP);
   return (
     <div className={styles.main}>
       <div className={styles.viewer}>{children}</div>
