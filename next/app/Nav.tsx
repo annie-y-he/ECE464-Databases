@@ -14,7 +14,7 @@ export default function Nav({
       <div className={styles.viewer}>{children}</div>
       <div className={styles.nav}>
         {buttons.map((btn, i) => (
-          <Link key={i} className={styles.navbtn} href={btn}>{btn}</Link>
+          <Link key={i} className={styles.navbtn} href={"/" + btn}>{btn}</Link>
         ))}
       </div>
     </div>
