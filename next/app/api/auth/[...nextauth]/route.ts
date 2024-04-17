@@ -41,12 +41,6 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    signIn: '/databases/auth/signin',  // Custom sign-in page
-    signOut: '/databases/auth/signout', // Custom sign-out page
-    error: '/databases/auth/error', // Error page
-    verifyRequest: '/databases/auth/verify-request', // Verify request page
-  },
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
