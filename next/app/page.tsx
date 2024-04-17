@@ -8,7 +8,7 @@ const BP = process.env.NEXT_PUBLIC_BASE_PATH;
 
 export default function (children: any, pageProps: any) {
   return (
-    <SessionProvider session={pageProps.session} basePath={BP + 'api/auth'}>
+    <SessionProvider session={pageProps.session} basePath={BP + '/api/auth'}>
       <Nav>
         <Home />
       </Nav>
