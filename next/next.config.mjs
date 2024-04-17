@@ -20,8 +20,8 @@ const nextConfig = {
   //     }
   //   ];
   // },
-  // basePath: '/databases',
-  assetPrefix: '/databases',
+  basePath: '/databases',
+  // assetPrefix: '/databases',
 };
 
 export default nextConfig;
