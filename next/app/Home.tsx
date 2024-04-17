@@ -37,7 +37,7 @@ export default function Home() {
     console.log( JSON.stringify({
       email, uname, password, fname, lname, dob
     }));
-    const response = await fetch('/api/signup', {
+    const response = await fetch('/databases/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
