@@ -12,15 +12,7 @@ const nextConfig = {
     // Return the modified config
     return config;
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/_next/:path*',
-  //       destination: '/databases/_next/:path*'
-  //     }
-  //   ];
-  // },
-  assetPrefix: '/databases',
+  basePath: '/databases',
 };
 
 export default nextConfig;
