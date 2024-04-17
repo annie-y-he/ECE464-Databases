@@ -3,6 +3,7 @@
 import styles from "./page.module.scss";
 import { useState } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
+const BP = process.env.NEXT_PUBLIC_BASE_PATH;
 
 async function handleSignOut() {
   await signOut({ redirect: false });
@@ -37,7 +38,7 @@ export default function Home() {
     console.log( JSON.stringify({
       email, uname, password, fname, lname, dob
     }));
-    const response = await fetch('/databases/api/signup', {
+    const response = await fetch( BP + '/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
