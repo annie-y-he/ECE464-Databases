@@ -33,8 +33,8 @@ elif [ "$1" = "restart" ]; then
   sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma migrate dev --name init && npx prisma generate && npx prisma db seed"
   echo "Restarting container..."
   sudo docker compose -p $PROJECT_NAME restart
-  echo "Starting nextjs..."
-  sudo docker exec ${PROJECT_NAME}-app-1 npm run start
+  # echo "Starting nextjs..."
+  # sudo docker exec ${PROJECT_NAME}-app-1 npm run start
 else
   echo "Starting services..."
   sudo docker compose -p $PROJECT_NAME up -d

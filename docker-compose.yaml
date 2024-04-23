@@ -16,7 +16,7 @@ services:
     # command: bash -c "npx prisma migrate dev --name init && npx prisma generate && npx prisma db seed && tail -f /dev/null"
     # command: bash -c "npx prisma migrate dev --name init && npx prisma generate && npx prisma db seed"
     # command: bash -c "npx prisma migrate dev --name init && npx prisma generate && npx prisma db seed && npm install && npm run build && npm run start"
-    command: tail -f /dev/null
+    command: npm run start
     ports:
       - "3001:3001"
     depends_on:
