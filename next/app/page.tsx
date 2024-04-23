@@ -16,9 +16,6 @@ import Search from './Search';
 
 const Nav = ({ setPage }:{setPage: React.Dispatch<React.SetStateAction<string>>}) => {
   const { data: session } = useSession();
-
-  // if is admin, add user tab
-  // if (session?.token.role == "admin") {
   if (session?.user) return (
     <div className={s.nav}>
       {buttons.map((btn, i) => (
