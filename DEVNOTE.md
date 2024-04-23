@@ -4,3 +4,4 @@
 - docker-compose is separate
 - change db url for local
 - persist data
+- basepath to next.config.mjs, .env bp add to api and asset

@@ -6,13 +6,14 @@ const prisma = new PrismaClient();
 
 async function signUp(req: NextRequest) {
   const body = await req.json();
-  const { email, uname, password, fname, lname, dob } = body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const { suEmail, uname, suPassword, fname, lname, dob } = body;
+  console.log(suEmail, uname, suPassword, fname, lname, dob)
+  const hashedPassword = await bcrypt.hash(suPassword, 10);
   let res;
   try {  
     await prisma.user.create({
       data: {
-        email: email,
+        email: suEmail,
         uname: uname,
         password: hashedPassword,
         first_name: fname,

@@ -14,16 +14,18 @@ export default function Home() {
   const [uname, setUname] = useState('');
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [siEmail, setSiEmail] = useState('');
+  const [siPassword, setSiPassword] = useState('');
+  const [suEmail, setSuEmail] = useState('');
+  const [suPassword, setSuPassword] = useState('');
   const [dob, setDOB] = useState('');
   /** signin using nextauth */
   const handleSignIn = async (e: any) => {
     e.preventDefault();
     const result = await signIn('credentials', { 
       redirect: false,
-      email, 
-      password 
+      siEmail, 
+      siPassword 
     });
 
     if (result?.error) {
@@ -36,7 +38,7 @@ export default function Home() {
   const handleSignUp = async (e: any) => {
     e.preventDefault();
     console.log( JSON.stringify({
-      email, uname, password, fname, lname, dob
+      suEmail, uname, suPassword, fname, lname, dob
     }));
     const response = await fetch( BP + '/api/signup', {
       method: 'POST',
@@ -44,7 +46,7 @@ export default function Home() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email, uname, password, fname, lname, dob
+        suEmail, uname, suPassword, fname, lname, dob
       }),
     });
   
@@ -58,83 +60,82 @@ export default function Home() {
 
   if (session?.user) {
     return (
-      <div className={`${styles.flexc} ${styles.full}`}>
+      <div className={`${styles.flexc} ${styles.full} ${styles.main}`}>
         <div>You are {`${session.user.name}`}</div>
         <button onClick={handleSignOut}>Log out</button>
       </div>
     )
   } else {
     return (
-      <div className={`${styles.flexr} ${styles.full}`}>
+      <div className={`${styles.flexr} ${styles.full} ${styles.main}`}>
         <form onSubmit={handleSignIn} className={`${styles.flexc} ${styles.full}`}>
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+          <label htmlFor="siEmail">Email:</label>
+          <input
+            type="email"
+            id="siEmail"
+            value={siEmail}
+            onChange={(e) => setSiEmail(e.target.value)}
+            required
+          />
+          <label htmlFor="siPassword">Password:</label>
+          <input
+            type="password"
+            id="siPassword"
+            value={siPassword}
+            onChange={(e) => setSiPassword(e.target.value)}
+            required
+          />
           <button type="submit">Sign In</button>
         </form>
         <form onSubmit={handleSignUp} className={`${styles.flexc} ${styles.full}`}>
-            <label htmlFor="uname">Username:</label>
-            <input
-              type="uname"
-              id="uname"
-              value={uname}
-              onChange={(e) => setUname(e.target.value)}
-              required
-            />
-            <label htmlFor="fname">Firstname:</label>
-            <input
-              type="fname"
-              id="fname"
-              value={fname}
-              onChange={(e) => setFname(e.target.value)}
-              required
-            />
-            <label htmlFor="lname">Lastname:</label>
-            <input
-              type="lname"
-              id="lname"
-              value={lname}
-              onChange={(e) => setLname(e.target.value)}
-              required
-            />
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <label htmlFor="dob">Date of Birth:</label>
-            <input
-              type="date"
-              id="dob"
-              value={dob}
-              onChange={(e) => setDOB(e.target.value)}
-              required
-            />
-
+          <label htmlFor="uname">Username:</label>
+          <input
+            type="uname"
+            id="uname"
+            value={uname}
+            onChange={(e) => setUname(e.target.value)}
+            required
+          />
+          <label htmlFor="fname">Firstname:</label>
+          <input
+            type="fname"
+            id="fname"
+            value={fname}
+            onChange={(e) => setFname(e.target.value)}
+            required
+          />
+          <label htmlFor="lname">Lastname:</label>
+          <input
+            type="lname"
+            id="lname"
+            value={lname}
+            onChange={(e) => setLname(e.target.value)}
+            required
+          />
+          <label htmlFor="suEmail">Email:</label>
+          <input
+            type="email"
+            id="suEmail"
+            value={suEmail}
+            onChange={(e) => setSuEmail(e.target.value)}
+            required
+          />
+          <label htmlFor="suPassword">Password:</label>
+          <input
+            type="password"
+            id="suPassword"
+            value={suPassword}
+            onChange={(e) => setSuPassword(e.target.value)}
+            required
+          />
+          <label htmlFor="dob">Date of Birth:</label>
+          <input
+            type="date"
+            id="dob"
+            value={dob}
+            onChange={(e) => setDOB(e.target.value)}
+            required
+          />
           <button type="submit">Sign Up</button>
         </form>
       </div>
