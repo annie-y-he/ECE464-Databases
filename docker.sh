@@ -20,6 +20,7 @@ elif [ "$1" = "push" ]; then
     git commit -m "update"
     git push
   fi
+  rsync -v ./next/.env.remote admin@ec2-18-215-72-38.compute-1.amazonaws.com:/home/admin/databases/next/.env.local
   ssh admin@ec2-18-215-72-38.compute-1.amazonaws.com "cd databases && git pull && ./docker.sh restart"
 elif [ "$1" = "restart" ]; then
   echo "Rebuilding images..."
