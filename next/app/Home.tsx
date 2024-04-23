@@ -1,7 +1,7 @@
 'use client';
 
 import styles from "./page.module.scss";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 const BP = process.env.NEXT_PUBLIC_BASE_PATH;
 
@@ -24,8 +24,8 @@ export default function Home() {
     e.preventDefault();
     const result = await signIn('credentials', { 
       redirect: false,
-      siEmail, 
-      siPassword 
+      email: siEmail, 
+      password: siPassword 
     });
 
     if (result?.error) {
@@ -57,17 +57,22 @@ export default function Home() {
       console.log("success");
     }
   };
+  
+  useEffect(() => {
+    console.log(session);
+  }, [session])
 
   if (session?.user) {
     return (
-      <div className={`${styles.flexc} ${styles.full} ${styles.main}`}>
-        <div>You are {`${session.user.name}`}</div>
-        <button onClick={handleSignOut}>Log out</button>
+      <div className={`${styles.flexc} ${styles.full}`}>
+        <h1>Hi, {session.user.name}!</h1>
+        <h2>Welcome to Solid Quality Library.</h2>
+        {/* <button onClick={handleSignOut}>Log out</button> */}
       </div>
     )
   } else {
     return (
-      <div className={`${styles.flexr} ${styles.full} ${styles.main}`}>
+      <div className={`${styles.flexr} ${styles.full}`}>
         <form onSubmit={handleSignIn} className={`${styles.flexc} ${styles.full}`}>
           <label htmlFor="siEmail">Email:</label>
           <input
