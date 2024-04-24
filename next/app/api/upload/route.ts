@@ -1,35 +1,61 @@
 // modify this file to accept book upload fields
 
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-async function signUp(req: NextRequest) {
+async function addPublication(req: NextRequest) {
   const body = await req.json();
-  const { suEmail, uname, suPassword, fname, lname, dob } = body;
-  console.log(suEmail, uname, suPassword, fname, lname, dob)
-  const hashedPassword = await bcrypt.hash(suPassword, 10);
-  let res;
+  // The JSON blob contains information about publication, book author, series, tag, and parent objects
+  const { book_name, author_name, description, tag, series, psid, pid, isbn, file, edition, num_pages, cover } = body;
+  // Publication: pid, isbn, file, edition, num_pages, cover
+  console.log("Publication info:");
+  console.log(pid, isbn, file, edition, num_pages, cover);
+  let pub_res;
+  // Book: book_name, description
+  console.log("Book info:");
+  console.log(book_name, description);
+  let book_res;
+  // Series: series
+
+  // Tag: tag(_name)
+
+  // Author: author_name
+
+  // Publication in Series: psid
   try {  
-    await prisma.user.create({
+    await prisma.publication.create({
       data: {
-        email: suEmail,
-        uname: uname,
-        password: hashedPassword,
-        first_name: fname,
-        last_name: lname,
-        dob: new Date(dob),
+        pid: pid,
+        isbn: isbn,
+        file: file,
+        edition: edition,
+        num_pages: num_pages,
+        cover: cover,
       },
     });
-    res = new Response(JSON.stringify("user created"), { status: 201 });
+    pub_res = new Response(JSON.stringify("Publication added"), { status: 201 });
   } catch (err) {
-    res = new Response(JSON.stringify("database error"), { status: 418 });
+    pub_res = new Response(JSON.stringify("Database Error"), { status: 418 });
   } finally {
     await prisma.$disconnect();
-    return res;
+    console.log(pub_res)
+  }
+  try {  
+    await prisma.book.create({
+      data: {
+        bname: book_name,
+        description: description,
+      },
+    });
+    book_res = new Response(JSON.stringify("Book added"), { status: 201 });
+  } catch (err) {
+    book_res = new Response(JSON.stringify("Database Error"), { status: 418 });
+  } finally {
+    await prisma.$disconnect();
+    console.log(book_res)
   }
 }
 
-export { signUp as GET, signUp as POST };
+export { addPublication as GET, addPublication as POST };
