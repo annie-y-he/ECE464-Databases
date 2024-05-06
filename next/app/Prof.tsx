@@ -36,7 +36,7 @@ export default function Prof() {
       <input type="text" />
       <div>Username</div>
       <input type="text" />
-      <div>image</div>
+      <div>Image</div>
       <input type="file" />
       <div>First Name</div>
       <input type="text" />
