@@ -33,8 +33,8 @@
 in databases folder:
 - ./docker.sh
 - ./docker.sh app
-  - npm install
-  - npx prisma generate
+  - npm install (only once)
+  - npx prisma generate (only once)
   - npx prisma migrate deploy
   - npx prisma db seed
   - exit
