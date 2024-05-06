@@ -1,4 +1,4 @@
-// modify this file to allow retrieval and editing of self profile
+// modify this file to allow retrieval of search results: user, book, author, series, publisher, tag
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';

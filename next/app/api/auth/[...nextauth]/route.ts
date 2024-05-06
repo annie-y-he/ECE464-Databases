@@ -1,3 +1,5 @@
+// this function utilizes next-auth for signin/signout and token/session generation
+
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
@@ -37,7 +39,7 @@ const authOptions: NextAuthOptions = {
           console.log("Password is incorrect");
           return null;
         }
-        return { id: user.uid, name: user.uname, email: user.email, role: user.role, image: user.image };
+        return { id: user.uid, name: user.uname, email: user.email, role: user.role };
       },
     }),
   ],

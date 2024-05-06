@@ -1,6 +1,4 @@
-// this function inserts entires into the database
-// need to edit to allow actual file upload
-// fetch existing relations if applicable, compare at the end then delete.
+// edit this function to allow retrieval of data
 
 import { PrismaClient } from '@prisma/client';
 import { NextRequest } from "next/server";

@@ -14,83 +14,86 @@ datasource db {
 }
 
 model user {
-  uid         String        @id @default(uuid())
-  password    String
-  dob         DateTime
-  email       String        @unique
-  uname       String
-  image       String?
-  first_name  String
-  last_name   String
-  role        String        @default("reader")
-  userUploads userUploads[]
-  userFollows userFollows[]
+  uid          String        @id @default(uuid())
+  password     String
+  dob          DateTime
+  email        String        @unique
+  uname        String
+  first_name   String
+  last_name    String
+  role         String        @default("reader")
+  publications publication[]
+  userFollows  userFollows[]
 }
 
 model publication {
-  pid           String          @id @default(uuid())
-  isbn          String?         @db.Char(13)
-  file          String
-  edition       String?
-  num_pages     Int
-  cover         String
-  pubInBook     pubInBook[]
-  pubInSeries   pubInSeries[]
+  pid String @id @default(uuid())
+
+  bid     String
+  edition String
+  book    book   @relation(fields: [bid], references: [bid])
+
+  sid    String?
+  psid   String
+  series series? @relation(fields: [sid], references: [sid])
+
+  uid  String?
+  user user?   @relation(fields: [uid], references: [uid])
+
+  cid       String?
+  year      String
+  publisher publisher? @relation(fields: [cid], references: [cid])
+
+  isbn  String
+  file  String
+  cover String
+
   authWritesPub authWritesPub[]
-  pubPubPub     pubPubPub[]
   pubInLang     pubInLang[]
-  userUploads   userUploads[]
+
+  @@unique([bid, edition])
 }
 
 model book {
   bid            String           @id @default(uuid())
-  description    String?
-  bname          String
-  pubInBook      pubInBook[]
+  bname          String           @unique
+  description    String
   bookHasTag     bookHasTag[]
   authWritesBook authWritesBook[]
+  publications   publication[]
 }
 
 model tag {
   tid        String       @id @default(uuid())
-  tname      String
+  tname      String       @unique
   bookHasTag bookHasTag[]
 }
 
 model series {
-  sid         String        @id @default(uuid())
-  sname       String
-  pubInSeries pubInSeries[]
+  sid          String        @id @default(uuid())
+  sname        String        @unique
+  publications publication[]
 }
 
 model author {
   aid            String           @id @default(uuid())
-  aname          String
-  description    String?
-  dob            DateTime?
+  aname          String           @unique
+  description    String
+  dob            String
   authWritesPub  authWritesPub[]
   authWritesBook authWritesBook[]
 }
 
 model publisher {
-  cid       String      @id @default(uuid())
-  pname     String
-  pubPubPub pubPubPub[]
+  cid          String        @id @default(uuid())
+  pname        String        @unique
+  publications publication[]
 }
 
 model language {
   lid       String      @id @default(uuid())
-  lname     String
+  lname     String      @unique
   pubInLang pubInLang[]
-}
-
-model pubInBook {
-  bid         String
-  pid         String
-  book        book        @relation(fields: [bid], references: [bid])
-  publication publication @relation(fields: [pid], references: [pid])
-
-  @@id([bid, pid])
 }
 
 model bookHasTag {
@@ -102,20 +105,10 @@ model bookHasTag {
   @@id([bid, tid])
 }
 
-model pubInSeries {
-  pid         String
-  sid         String
-  psid        Int?
-  publication publication @relation(fields: [pid], references: [pid])
-  series      series      @relation(fields: [sid], references: [sid])
-
-  @@id([pid, sid])
-}
-
 model authWritesPub {
   aid         String
   pid         String
-  role        String?
+  role        String
   author      author      @relation(fields: [aid], references: [aid])
   publication publication @relation(fields: [pid], references: [pid])
 
@@ -125,21 +118,11 @@ model authWritesPub {
 model authWritesBook {
   aid    String
   bid    String
-  role   String?
-  author author  @relation(fields: [aid], references: [aid])
-  book   book    @relation(fields: [bid], references: [bid])
+  role   String
+  author author @relation(fields: [aid], references: [aid])
+  book   book   @relation(fields: [bid], references: [bid])
 
   @@id([aid, bid])
-}
-
-model pubPubPub {
-  cid         String
-  year        Int
-  pid         String
-  publisher   publisher   @relation(fields: [cid], references: [cid])
-  publication publication @relation(fields: [pid], references: [pid])
-
-  @@id([cid, pid])
 }
 
 model pubInLang {
@@ -149,15 +132,6 @@ model pubInLang {
   language    language    @relation(fields: [lid], references: [lid])
 
   @@id([pid, lid])
-}
-
-model userUploads {
-  uid         String
-  pid         String
-  user        user        @relation(fields: [uid], references: [uid])
-  publication publication @relation(fields: [pid], references: [pid])
-
-  @@id([uid, pid])
 }
 
 model userFollows {

@@ -1,3 +1,5 @@
+// this function handles signup
+
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { NextRequest } from "next/server";

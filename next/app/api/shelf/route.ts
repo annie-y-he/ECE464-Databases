@@ -1,4 +1,4 @@
-// modify this file to retrieve like and upload records
+// modify this file to allow retrieval of followed content and uploads: uploads, user, publication, book, tag, series, author, publisher, language
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';

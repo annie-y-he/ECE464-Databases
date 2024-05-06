@@ -15,10 +15,15 @@ CREATE TABLE "user" (
 -- CreateTable
 CREATE TABLE "publication" (
     "pid" TEXT NOT NULL,
-    "isbn" CHAR(13),
+    "bid" TEXT NOT NULL,
+    "edition" TEXT NOT NULL,
+    "sid" TEXT,
+    "psid" TEXT NOT NULL,
+    "uid" TEXT NOT NULL,
+    "cid" TEXT,
+    "year" TEXT NOT NULL,
+    "isbn" TEXT NOT NULL,
     "file" TEXT NOT NULL,
-    "edition" TEXT,
-    "num_pages" INTEGER NOT NULL,
     "cover" TEXT NOT NULL,
 
     CONSTRAINT "publication_pkey" PRIMARY KEY ("pid")
@@ -27,8 +32,8 @@ CREATE TABLE "publication" (
 -- CreateTable
 CREATE TABLE "book" (
     "bid" TEXT NOT NULL,
-    "description" TEXT,
     "bname" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "book_pkey" PRIMARY KEY ("bid")
 );
@@ -53,8 +58,8 @@ CREATE TABLE "series" (
 CREATE TABLE "author" (
     "aid" TEXT NOT NULL,
     "aname" TEXT NOT NULL,
-    "description" TEXT,
-    "dob" TIMESTAMP(3),
+    "description" TEXT NOT NULL,
+    "dob" TEXT NOT NULL,
 
     CONSTRAINT "author_pkey" PRIMARY KEY ("aid")
 );
@@ -76,14 +81,6 @@ CREATE TABLE "language" (
 );
 
 -- CreateTable
-CREATE TABLE "pubInBook" (
-    "bid" TEXT NOT NULL,
-    "pid" TEXT NOT NULL,
-
-    CONSTRAINT "pubInBook_pkey" PRIMARY KEY ("bid","pid")
-);
-
--- CreateTable
 CREATE TABLE "bookHasTag" (
     "bid" TEXT NOT NULL,
     "tid" TEXT NOT NULL,
@@ -92,19 +89,10 @@ CREATE TABLE "bookHasTag" (
 );
 
 -- CreateTable
-CREATE TABLE "pubInSeries" (
-    "pid" TEXT NOT NULL,
-    "sid" TEXT NOT NULL,
-    "psid" INTEGER,
-
-    CONSTRAINT "pubInSeries_pkey" PRIMARY KEY ("pid","sid")
-);
-
--- CreateTable
 CREATE TABLE "authWritesPub" (
     "aid" TEXT NOT NULL,
     "pid" TEXT NOT NULL,
-    "role" TEXT,
+    "role" TEXT NOT NULL,
 
     CONSTRAINT "authWritesPub_pkey" PRIMARY KEY ("aid","pid")
 );
@@ -113,18 +101,9 @@ CREATE TABLE "authWritesPub" (
 CREATE TABLE "authWritesBook" (
     "aid" TEXT NOT NULL,
     "bid" TEXT NOT NULL,
-    "role" TEXT,
+    "role" TEXT NOT NULL,
 
     CONSTRAINT "authWritesBook_pkey" PRIMARY KEY ("aid","bid")
-);
-
--- CreateTable
-CREATE TABLE "pubPubPub" (
-    "cid" TEXT NOT NULL,
-    "year" INTEGER NOT NULL,
-    "pid" TEXT NOT NULL,
-
-    CONSTRAINT "pubPubPub_pkey" PRIMARY KEY ("cid","pid")
 );
 
 -- CreateTable
@@ -133,14 +112,6 @@ CREATE TABLE "pubInLang" (
     "lid" TEXT NOT NULL,
 
     CONSTRAINT "pubInLang_pkey" PRIMARY KEY ("pid","lid")
-);
-
--- CreateTable
-CREATE TABLE "userUploads" (
-    "uid" TEXT NOT NULL,
-    "pid" TEXT NOT NULL,
-
-    CONSTRAINT "userUploads_pkey" PRIMARY KEY ("uid","pid")
 );
 
 -- CreateTable
@@ -155,23 +126,44 @@ CREATE TABLE "userFollows" (
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
--- AddForeignKey
-ALTER TABLE "pubInBook" ADD CONSTRAINT "pubInBook_bid_fkey" FOREIGN KEY ("bid") REFERENCES "book"("bid") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "publication_bid_edition_key" ON "publication"("bid", "edition");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "book_bname_key" ON "book"("bname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tag_tname_key" ON "tag"("tname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "series_sname_key" ON "series"("sname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "author_aname_key" ON "author"("aname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "publisher_pname_key" ON "publisher"("pname");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "language_lname_key" ON "language"("lname");
 
 -- AddForeignKey
-ALTER TABLE "pubInBook" ADD CONSTRAINT "pubInBook_pid_fkey" FOREIGN KEY ("pid") REFERENCES "publication"("pid") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "publication" ADD CONSTRAINT "publication_bid_fkey" FOREIGN KEY ("bid") REFERENCES "book"("bid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "publication" ADD CONSTRAINT "publication_sid_fkey" FOREIGN KEY ("sid") REFERENCES "series"("sid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "publication" ADD CONSTRAINT "publication_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "publication" ADD CONSTRAINT "publication_cid_fkey" FOREIGN KEY ("cid") REFERENCES "publisher"("cid") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bookHasTag" ADD CONSTRAINT "bookHasTag_bid_fkey" FOREIGN KEY ("bid") REFERENCES "book"("bid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bookHasTag" ADD CONSTRAINT "bookHasTag_tid_fkey" FOREIGN KEY ("tid") REFERENCES "tag"("tid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "pubInSeries" ADD CONSTRAINT "pubInSeries_pid_fkey" FOREIGN KEY ("pid") REFERENCES "publication"("pid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "pubInSeries" ADD CONSTRAINT "pubInSeries_sid_fkey" FOREIGN KEY ("sid") REFERENCES "series"("sid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "authWritesPub" ADD CONSTRAINT "authWritesPub_aid_fkey" FOREIGN KEY ("aid") REFERENCES "author"("aid") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -186,22 +178,10 @@ ALTER TABLE "authWritesBook" ADD CONSTRAINT "authWritesBook_aid_fkey" FOREIGN KE
 ALTER TABLE "authWritesBook" ADD CONSTRAINT "authWritesBook_bid_fkey" FOREIGN KEY ("bid") REFERENCES "book"("bid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "pubPubPub" ADD CONSTRAINT "pubPubPub_cid_fkey" FOREIGN KEY ("cid") REFERENCES "publisher"("cid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "pubPubPub" ADD CONSTRAINT "pubPubPub_pid_fkey" FOREIGN KEY ("pid") REFERENCES "publication"("pid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "pubInLang" ADD CONSTRAINT "pubInLang_pid_fkey" FOREIGN KEY ("pid") REFERENCES "publication"("pid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "pubInLang" ADD CONSTRAINT "pubInLang_lid_fkey" FOREIGN KEY ("lid") REFERENCES "language"("lid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "userUploads" ADD CONSTRAINT "userUploads_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "userUploads" ADD CONSTRAINT "userUploads_pid_fkey" FOREIGN KEY ("pid") REFERENCES "publication"("pid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "userFollows" ADD CONSTRAINT "userFollows_uid_fkey" FOREIGN KEY ("uid") REFERENCES "user"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -38,6 +38,7 @@ elif [ "$1" = "restart" ]; then
 else
   echo "Starting services..."
   sudo docker compose -p $PROJECT_NAME up -d
+  sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma generate && npx prisma migrate deploy && npx prisma db seed"
   echo "Containers are running in the background."
 fi
 echo "Exec into mysql with:"

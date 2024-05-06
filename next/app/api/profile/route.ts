@@ -1,4 +1,4 @@
-// modify this file to recommend books to user based on what the user has liked.
+// modify this file to allow retrieval and editing of self profile
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
