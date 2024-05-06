@@ -8,24 +8,43 @@ const prisma = new PrismaClient();
 
 async function signUp(req: NextRequest) {
   const body = await req.json();
-  const { suEmail, uname, suPassword, fname, lname, dob } = body;
-  console.log(suEmail, uname, suPassword, fname, lname, dob)
-  const hashedPassword = await bcrypt.hash(suPassword, 10);
-  let res;
+  const { query } = body;
+  console.log(query)
+  let res, result, item;
   try {  
-    await prisma.user.create({
-      data: {
-        email: suEmail,
-        uname: uname,
-        password: hashedPassword,
-        first_name: fname,
-        last_name: lname,
-        dob: new Date(dob),
+    const books = await prisma.book.findMany({
+      where: {
+        OR: [
+          {
+            bname: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            bookHasTag: {
+              some: {
+                tag: {
+                  tname: {
+                    contains: query,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
+          },
+        ],
       },
     });
-    res = new Response(JSON.stringify("user created"), { status: 201 });
+    res = new Response(JSON.stringify({ msg: "found stuff", data: books }), { status: 200 });
   } catch (err) {
-    res = new Response(JSON.stringify("database error"), { status: 418 });
+    res = new Response(JSON.stringify({ msg: "database error", data: err }), { status: 418 });
   } finally {
     await prisma.$disconnect();
     return res;
