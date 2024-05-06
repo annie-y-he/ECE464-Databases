@@ -34,6 +34,7 @@ async function follow(req: NextRequest) {
       create: {
         uid: user.uid,
         fid: followedObject.uid,
+        type: type,
       },
     });
     ids.fid = result.fid;
