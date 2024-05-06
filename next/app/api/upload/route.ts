@@ -216,7 +216,7 @@ async function addPublication(req: NextRequest) {
     res = new Response(JSON.stringify("Entries added"), { status: 201 });
   } catch (err) {
     console.log(err);
-    res = new Response(JSON.stringify("Database Error"), { status: 418 });
+    res = new Response(JSON.stringify({ msg: "Database Error", data: err }), { status: 418 });
   } finally {
     await prisma.$disconnect();
     return res;
