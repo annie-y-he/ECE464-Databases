@@ -39,7 +39,7 @@ elif [ "$1" = "restart" ]; then
   # sudo docker compose -p $PROJECT_NAME restart
   # echo "Starting nextjs..."
   # sudo docker exec ${PROJECT_NAME}-app-1 npm run start
-  echo "No need to restart..."
+  echo "No need to restart..." 
 else
   echo "Starting services..."
   sudo docker compose -p $PROJECT_NAME up -d
