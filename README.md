@@ -22,6 +22,22 @@ SQLib: Solid Quality Library
 
 A platform similar to libgen where users can upload their favorite books and discover new titles from other users.
 
+### SETUP
+
+In databases repo rood directory:
+```bash
+./docker.sh
+./docker.sh app
+  npm install
+  npx prisma generate
+  npx prisma migrate deploy
+  npx prisma db seed
+  exit
+cd next
+npm run dev
+```
+Note that `npm install` and `npx prisma generate` only need to be run once.
+
 ### TECH STACK
 
 - **Next.js**: fullstack framework.

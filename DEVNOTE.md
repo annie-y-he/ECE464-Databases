@@ -29,14 +29,3 @@
 
 ## Errors
 - **uid**: each seed generates different uuid which differs from the cookies. compare sub or make persistent.
-## DevEnv
-in databases folder:
-- ./docker.sh
-- ./docker.sh app
-  - npm install (only once)
-  - npx prisma generate (only once)
-  - npx prisma migrate deploy
-  - npx prisma db seed
-  - exit
-in next folder:
-- npm run dev
