@@ -26,3 +26,6 @@
 
 #### database
 - **persistence**: setup persistent volume
+
+## Errors
+- **uid**: each seed generates different uuid which differs from the cookies. compare sub or make persistent.
