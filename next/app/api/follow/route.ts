@@ -9,10 +9,10 @@ async function follow(req: NextRequest) {
   const body = await req.json();
   // The JSON blob contains information about publication, book author, series, tag, and parent objects
   let res, result;
-  const { token, user, fid, type } = body;
+  const { token, fid, type } = body;
   // Follower info (user ID and maybe name)
   console.log("Follower info:");
-  console.log(user);
+  console.log(token.user);
   // Followed info: type
   console.log("Followed info:");
   console.log("ID: "+ fid +"\n");
@@ -29,10 +29,10 @@ async function follow(req: NextRequest) {
 
   try {  
     result = await prisma.userFollows.upsert({
-      where: { uid: user.uid },
+      where: { uid: token.user.sub },
       update: { fid: fid },
       create: {
-        uid: user.uid,
+        uid: token.user.sub,
         fid: fid,
         type: type,
       },
