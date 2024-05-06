@@ -247,7 +247,7 @@ export default function Nav() {
           ))}
         </div>
       }
-      <h1 className={s.reload} onClick={() => getBooks(setAllBooks)} style={{transform: upload ? 'rotate(360deg)' : '', transition: 'transform 150ms ease',}}><div>⟳</div></h1>
+      <h1 className={s.reload} onClick={() => getBooks(setAllBooks)}><div>⟳</div></h1>
 
       <h1 className={s.plus} onClick={() => setUpload(!upload)} style={{transform: upload ? 'rotate(45deg)' : '', transition: 'transform 150ms ease',}}><div>＋</div></h1>
     </div>
