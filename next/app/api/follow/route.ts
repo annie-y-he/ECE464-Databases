@@ -29,15 +29,15 @@ async function follow(req: NextRequest) {
 
   try {  
     result = await prisma.userFollows.upsert({
-      where: { bname: book.bname },
-      update: { description: book.description },
+      where: { uid: user.uid },
+      update: { fid: followedObject.uid },
       create: {
-        bname: book.bname,
-        description: book.description,
+        uid: user.uid,
+        fid: followedObject.uid,
       },
     });
-    ids.bid = result.bid;
-    console.log("Book Upserted\n", result);
+    ids.fid = result.fid;
+    console.log("User follow Upserted\n", result);
 
     res = new Response(JSON.stringify("Entries added"), { status: 201 });
   } catch (err) {
