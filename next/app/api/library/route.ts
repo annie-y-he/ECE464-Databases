@@ -1,4 +1,4 @@
-// modify this file to recommend books to user based on what the user has liked.
+// modify this file to return every book lmao
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
@@ -6,24 +6,12 @@ import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
-async function signUp(req: NextRequest) {
+async function getAllBooks(req: NextRequest) {
   const body = await req.json();
-  const { suEmail, uname, suPassword, fname, lname, dob } = body;
-  console.log(suEmail, uname, suPassword, fname, lname, dob)
-  const hashedPassword = await bcrypt.hash(suPassword, 10);
   let res;
   try {  
-    await prisma.user.create({
-      data: {
-        email: suEmail,
-        uname: uname,
-        password: hashedPassword,
-        first_name: fname,
-        last_name: lname,
-        dob: new Date(dob),
-      },
-    });
-    res = new Response(JSON.stringify("user created"), { status: 201 });
+    const books = prisma.user.findMany();
+    res = new Response(JSON.stringify({msg: "All books fetched", data: books}), { status: 201 });
   } catch (err) {
     res = new Response(JSON.stringify("database error"), { status: 418 });
   } finally {
@@ -32,4 +20,4 @@ async function signUp(req: NextRequest) {
   }
 }
 
-export { signUp as GET, signUp as POST };
+export { getAllBooks as GET, getAllBooks as POST };
