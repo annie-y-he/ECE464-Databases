@@ -30,7 +30,7 @@ elif [ "$1" = "restart" ]; then
   echo "Building the application..."
   sudo docker exec ${PROJECT_NAME}-app-1 npm run build
   echo "Seeding database..."
-  sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma migrate dev --name init && npx prisma generate && npx prisma db seed"
+  sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma migrate deploy && npx prisma generate && npx prisma db seed"
   echo "Restarting container..."
   sudo docker compose -p $PROJECT_NAME restart
   # echo "Starting nextjs..."
@@ -38,7 +38,7 @@ elif [ "$1" = "restart" ]; then
 else
   echo "Starting services..."
   sudo docker compose -p $PROJECT_NAME up -d
-  sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma generate && npx prisma migrate deploy && npx prisma db seed"
+  # sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma generate && npx prisma migrate deploy && npx prisma db seed"
   echo "Containers are running in the background."
 fi
 echo "Exec into mysql with:"
