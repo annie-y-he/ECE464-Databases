@@ -57,14 +57,14 @@ async function addPublication(req: NextRequest) {
     console.log("Book Upserted\n", result);
 
     if (book.tags) {
-      result = await prisma.$transaction([
-        ...book.tags.split(',').map((t: string) => prisma.tag.upsert({
+      result = await prisma.$transaction(
+        book.tags.split(',').map((t: string) => prisma.tag.upsert({
         where: { tname: t.trim() },
         update: {},
         create: {
           tname: t.trim(),
         }
-      }))]);
+      })));
       ids.tid = result.map(t => t.tid);
       console.log("Tags Upserted\n", result)
     }
@@ -82,8 +82,8 @@ async function addPublication(req: NextRequest) {
     }
 
     if (authors) {
-      result = await prisma.$transaction([
-        ...authors.map((a: any) => prisma.author.upsert({
+      result = await prisma.$transaction(
+        authors.map((a: any) => prisma.author.upsert({
           where: { aname: a.aname },
           update: { 
             description: a.description,
@@ -95,7 +95,7 @@ async function addPublication(req: NextRequest) {
             dob: a.dob,
           }
         }))
-      ]);
+      );
       ids.aid = result.map(a => a.aid);
       console.log("Authors Upserted\n", result)
     }
@@ -113,14 +113,14 @@ async function addPublication(req: NextRequest) {
     }
 
     if (book.langs) {
-      result = await prisma.$transaction([
-        ...book.langs.split(',').map((l: string) => prisma.language.upsert({
+      result = await prisma.$transaction(
+        book.langs.split(',').map((l: string) => prisma.language.upsert({
         where: { lname: l.trim() },
         update: {},
         create: {
           lname: l.trim(),
         }
-      }))]);
+      })));
       ids.lid = result.map(l => l.lid);
       console.log("Languages Upserted\n", result)
     }
@@ -159,8 +159,7 @@ async function addPublication(req: NextRequest) {
     console.log("Id of Updated Fields\n", ids)
 
     if (ids.tid) {
-      result = await prisma.$transaction([
-        ...ids.tid.map(id => prisma.bookHasTag.upsert({
+      result = await prisma.$transaction(ids.tid.map(id => prisma.bookHasTag.upsert({
           where: { bid_tid: { bid: ids.bid, tid: id } },
           update: {},
           create: {
@@ -168,13 +167,12 @@ async function addPublication(req: NextRequest) {
             tid: id,
           }
         }))
-      ]);
+      );
       console.log("Book Has Tags Upserted\n", result)
     }
 
     if (ids.aid) {
-      result = await prisma.$transaction([
-        ...ids.aid.map((id: any, index) => authors[index].wbook ? prisma.authWritesBook.upsert({
+      result = await prisma.$transaction(ids.aid.map((id: any, index) => authors[index].wbook ? prisma.authWritesBook.upsert({
           where: { aid_bid: { aid: id, bid: ids.bid } },
           update: {
             role: authors[index].role,
@@ -195,13 +193,12 @@ async function addPublication(req: NextRequest) {
             role: authors[index].role,
           }
         }))
-      ]);
+      );
       console.log("Author Writes Upserted\n", result)
     }
 
     if (ids.lid) {
-      result = await prisma.$transaction([
-        ...ids.lid.map((id: any) => prisma.pubInLang.upsert({
+      result = await prisma.$transaction(ids.lid.map((id: any) => prisma.pubInLang.upsert({
           where: { pid_lid: { pid: ids.pid, lid: id } },
           update: {},
           create: {
@@ -209,7 +206,7 @@ async function addPublication(req: NextRequest) {
             lid: id,
           }
         }))
-      ]);
+      );
       console.log("Pub In Lang Upserted\n", result)
     }
 

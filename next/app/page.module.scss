@@ -61,7 +61,7 @@
   flex-wrap: wrap;
 }
 
-.plus {
+.plus, .reload {
   position: absolute;
   right: 50px;
   bottom: 50px;
@@ -76,6 +76,13 @@
     background-color: bisque;
   }
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reload {
+  bottom: 120px;
 }
 
 .upload {

@@ -90,6 +90,7 @@ const nbooks = 20;
 export default function Nav() {
   const { data: token } = useSession();
   const [upload, setUpload] = useState(false);
+  const [allBooks, setAllBooks] = useState<Book[]>([])
   const emptyBook = {
     bname: "",
     description: "",
@@ -114,7 +115,7 @@ export default function Nav() {
   const [book, setBook] = useState<UpBook>(emptyBook)
   const [publication, setPublication] = useState<UpPub>(emptyPub)
   const [authors, setAuthors] = useState<UpAuth[]>([]);
-
+  useEffect(() => {getBooks(setAllBooks)}, []);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log( JSON.stringify({
@@ -137,6 +138,32 @@ export default function Nav() {
       console.log("success");
     }
   };
+
+  const getBooks = async (setAllBooks: React.Dispatch<React.SetStateAction<Book[]>>) => {
+    const response = await fetch( BP + '/api/library', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+    });
+  
+    const body = await response.json();
+    setAllBooks(body.data);
+  }
+
+  const sendLike = async (method: string, bid: string) => {
+    const response = await fetch( BP + '/api/follow', {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: token, fid: bid, type: "book" }),
+    });
+  
+    const body = await response.json();
+    console.log(body);
+  }
 
   return (
     <div>
@@ -206,12 +233,23 @@ export default function Nav() {
             }}>clear</button>
           </div>
         </form> : <div className={s.lib}>
-          {Array.from({ length: nbooks }).map((_, i) => (
-            <p key={i} className={s.book}>This is book {i + 1}</p>
+          {allBooks.map((item, index) => (
+            <p key={index} className={s.book}>
+              <div>{item.bname}</div>
+              <input type="checkbox" onClick={(e) => {
+                if ((e.target as HTMLInputElement).checked) {
+                  sendLike('POST', item.bid)
+                } else {
+                  sendLike('DELETE', item.bid)
+                }
+              }}/>
+            </p>
           ))}
         </div>
       }
-      <h1 className={s.plus} onClick={() => setUpload(!upload)} style={{transform: upload ? 'rotate(45deg)' : '', transition: 'transform 150ms ease',}}>＋</h1>
+      <h1 className={s.reload} onClick={() => getBooks(setAllBooks)} style={{transform: upload ? 'rotate(360deg)' : '', transition: 'transform 150ms ease',}}><div>⟳</div></h1>
+
+      <h1 className={s.plus} onClick={() => setUpload(!upload)} style={{transform: upload ? 'rotate(45deg)' : '', transition: 'transform 150ms ease',}}><div>＋</div></h1>
     </div>
   );
 }
