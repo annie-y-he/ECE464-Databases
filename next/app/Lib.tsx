@@ -132,7 +132,7 @@ export default function Nav() {
   
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Insert failed:', errorData.error);
+      console.error('Insert failed:', errorData);
     } else {
       console.log("success");
     }
