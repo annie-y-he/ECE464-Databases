@@ -1,5 +1,4 @@
-// this function inserts entires into the database
-// need to edit to allow actual file upload
+// this function inserts book, publication, authors, tags, series, publisher, language into the database
 // fetch existing relations if applicable, compare at the end then delete.
 
 import { PrismaClient } from '@prisma/client';

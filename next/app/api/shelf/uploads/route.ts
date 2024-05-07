@@ -1,4 +1,4 @@
-// modify this file to allow retrieval of followed content and uploads: uploads, user, publication, book, tag, series, author, publisher, language
+// this function retrieves of uploads of the current user
 
 import { PrismaClient } from '@prisma/client';
 import { NextRequest } from "next/server";
@@ -24,7 +24,7 @@ async function getUploads(req: NextRequest) {
     ));
 
     console.log(user);
-    res = new Response(JSON.stringify({msg: "All books fetched", data: result}), { status: 201 });
+    res = new Response(JSON.stringify({msg: "user uploads fetched", data: result}), { status: 201 });
   } catch (err) {
     res = new Response(JSON.stringify({msg: "database error", data: err}), { status: 418 });
   } finally {
