@@ -310,7 +310,7 @@ export default function Nav() {
           <div className={s.lib}>
             {bookDisplay.publications ? bookDisplay.publications.map((item: Publication, index: number) => (
               <div key={index} className={s.book} onClick={() => console.log(item)}>
-                <Image src={item.cover} alt="Base64 Encoded Image" width={0} height={0} />
+                {item.cover && <Image src={item.cover} alt="Base64 Encoded Image" width={0} height={0} />}
                 <p className={s.edition}>{item.edition || "?"}</p>
               </div>
             )) : <div>no publication</div>}
