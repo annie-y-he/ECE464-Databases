@@ -124,9 +124,9 @@ async function main() {
     },
   });
 
-  const result = await prisma.$transaction(transactions);
+  // const result = await prisma.$transaction(transactions);
 
-  console.log({ annie, jeffrey, ricky, result })
+  console.log({ annie, jeffrey, ricky })
 }
 main()
   .then(async () => {
