@@ -25,8 +25,8 @@ elif [ "$1" = "push" ]; then
 elif [ "$1" = "restart" ]; then
   # echo "Rebuilding images..."
   # sudo docker compose -p $PROJECT_NAME up -d --build
-  # echo "Installing dependencies..."
-  # sudo docker exec ${PROJECT_NAME}-app-1 npm install
+  echo "Installing dependencies..."
+  sudo docker exec ${PROJECT_NAME}-app-1 npm install
   echo "Building the application..."
   sudo docker exec ${PROJECT_NAME}-app-1 npm run build
   echo "Generating schema..."
