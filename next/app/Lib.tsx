@@ -275,7 +275,7 @@ export default function Nav() {
             <div key={index} className={s.book} onClick={() => getPubs(item.bid)}>
               <p>{item.bname}</p>
               <label>
-                Favorite-
+                Favorite -
                 <input type="checkbox" checked={item.followed} onClick={(e) => {
                   e.stopPropagation();
                   if (!item.followed) {

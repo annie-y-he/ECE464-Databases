@@ -187,9 +187,12 @@
   align-items: center;
   padding: 3em 10px 10px 10px;
   position: relative;
-  input {
+  > :last-child {
     position: absolute;
     bottom: 30px;
-    scale: 1.5;
+    input {
+      scale: 1.2;
+      margin: 0 5px;
+    }
   }
 }
