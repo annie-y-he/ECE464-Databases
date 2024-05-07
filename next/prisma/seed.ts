@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
+const { faker } = require('@faker-js/faker');
 
 const prisma = new PrismaClient()
 
@@ -16,6 +17,71 @@ const transactions = [
   prisma.book.upsert({ where: { bname: 'Shadows of the Past' }, update: { description: 'A gripping historical drama set against the backdrop of World War II, where love and courage triumph over the darkest of times.' }, create: { bname: 'Shadows of the Past', description: 'A gripping historical drama set against the backdrop of World War II, where love and courage triumph over the darkest of times.' }, }),
   // Add more entries if needed
 ];
+
+// const transactions = [
+//   // Authors
+//   ...Array.from({ length: 5 }, () => prisma.author.upsert({
+//     where: { aname: faker.person.fullName() },
+//     update: { description: faker.lorem.paragraph(), dob: faker.date.birthdate() },
+//     create: { aname: faker.person.fullName(), description: faker.lorem.paragraph(), dob: faker.date.birthdate() }
+//   })),
+//   // Tags
+//   ...Array.from({ length: 10 }, () => prisma.tag.upsert({
+//     where: { tname: faker.lorem.word() },
+//     update: {},
+//     create: { tname: faker.lorem.word() }
+//   })),
+//   // Languages
+//   ...Array.from({ length: 2 }, () => prisma.language.upsert({
+//     where: { lname: faker.random.locale() },
+//     update: {},
+//     create: { lname: faker.random.locale() }
+//   })),
+//   // Publisher
+//   prisma.publisher.upsert({
+//     where: { pname: faker.company.companyName() },
+//     update: {},
+//     create: { pname: faker.company.companyName() }
+//   }),
+//   // Series
+//   prisma.series.upsert({
+//     where: { sname: faker.random.word() },
+//     update: {},
+//     create: { sname: faker.random.word() }
+//   }),
+//   // Book
+//   prisma.book.upsert({
+//     where: { bname: faker.random.words() },
+//     update: { description: faker.lorem.paragraph() },
+//     create: { bname: faker.random.words(), description: faker.lorem.paragraph() }
+//   }),
+//   // Publications
+//   ...Array.from({ length: 5 }, () => prisma.publication.upsert({
+//     where: { pid: faker.random.uuid() },
+//     update: {
+//       edition: faker.random.word(),
+//       year: faker.date.past().getFullYear().toString(),
+//       isbn: `${faker.random.number({ min: 100, max: 999 })}-123456-789-${faker.random.number({ min: 100, max: 999 })}`,
+//       file: `path/to/${faker.system.fileName()}.pdf`,
+//       cover: `path/to/${faker.system.fileName()}.jpg`
+//     },
+//     create: {
+//       pid: faker.random.uuid(),
+//       edition: faker.random.word(),
+//       year: faker.date.past().getFullYear().toString(),
+//       isbn: `${faker.random.number({ min: 100, max: 999 })}-123456-789-${faker.random.number({ min: 100, max: 999 })}`,
+//       file: `path/to/${faker.system.fileName()}.pdf`,
+//       cover: `path/to/${faker.system.fileName()}.jpg`,
+//       book: { connect: { bname: faker.random.words() } },
+//       author: { connect: { aname: faker.person.fullName() } },
+//       tag: { connect: Array.from({ length: 5 }, () => ({ tname: faker.lorem.word() })) },
+//       language: { connect: { lname: faker.random.locale() } },
+//       publisher: { connect: { pname: faker.company.companyName() } },
+//       series: { connect: { sname: faker.random.word() } }
+//     }
+//   })),
+// ];
+
 
 async function main() {
   const annie = await prisma.user.upsert({

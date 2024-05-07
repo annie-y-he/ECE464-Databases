@@ -1,6 +1,7 @@
 import s from "./page.module.scss";
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
+import Image from 'next/image';
 
 import {
   book as Book, 
@@ -24,10 +25,13 @@ interface UpPub extends Pick<Publication, 'edition' | 'isbn'>, Pick<Series, 'sna
   psid: string;
   year: string;
   langs: string;
+  file: string | ArrayBuffer;
+  cover: string | ArrayBuffer;
 };
 interface AllBook extends Book {
   followed: boolean;
 }
+
 
 const AuthorField = ({index, authors, setAuthors} : React.HTMLProps<HTMLDivElement> & {index: number; authors: UpAuth[]; setAuthors: React.Dispatch<React.SetStateAction<UpAuth[]>>}) => {
 
@@ -107,6 +111,8 @@ export default function Nav() {
     pname: "",
     year: "",
     langs: "",
+    file: "",
+    cover: "",
   }
   const emptyAuth = {
     aname: "",
@@ -118,6 +124,7 @@ export default function Nav() {
   const [book, setBook] = useState<UpBook>(emptyBook)
   const [publication, setPublication] = useState<UpPub>(emptyPub)
   const [authors, setAuthors] = useState<UpAuth[]>([]);
+  const [bookDisplay, setBookDisplay] = useState<any>();
   useEffect(() => {getBooks(setAllBooks)}, []);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -186,7 +193,8 @@ export default function Nav() {
     });
   
     const body = await response.json();
-    console.log(body.data)
+    setBookDisplay(body.data);
+    console.log(bookDisplay);
   }
 
 
@@ -202,6 +210,30 @@ export default function Nav() {
     const body = await response.json();
     console.log(body);
   }
+
+  const handleFileChange = (event: any, is: string) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          if (is == 'cover') {
+            setPublication({...publication, cover: event.target.result});
+          } else {
+            setPublication({...publication, file: event.target.result});
+          }
+        }
+      };
+      reader.onerror = (error) => {
+        console.error('Error reading file:', error);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  useEffect(() => {
+    console.log(bookDisplay);
+  }, [bookDisplay])
 
   return (
     <div>
@@ -226,11 +258,11 @@ export default function Nav() {
           </label>
           <label>
             Upload PDF
-            <input type="file" accept="application/pdf"/>
+            <input type="file" accept="application/pdf" onChange={(e) => handleFileChange(e, 'file')}/>
           </label>
           <label>
             Cover Image
-            <input type="file" accept="image/*"/>
+            <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'cover')}/>
           </label>
           <label>
             ISBN
@@ -270,21 +302,34 @@ export default function Nav() {
               setAuthors([]);
             }}>clear</button>
           </div>
-        </form> : <div className={s.lib}>
+        </form> : bookDisplay ? <div className={s.detail}>
+          <button className={s.btn} onClick={() => setBookDisplay(undefined)}>close</button>
+          <h1>{bookDisplay.bname}</h1>
+          <p>{bookDisplay.description}</p>
+          <div className={s.tags}>{bookDisplay.bookHasTag.map((item: any, index: number) => <div>{item.tag.tname}</div>)}</div>
+          <div className={s.lib}>
+            {bookDisplay.publications ? bookDisplay.publications.map((item: Publication, index: number) => (
+              <div key={index} className={s.book} onClick={() => console.log(item)}>
+                <Image src={item.cover} alt="Base64 Encoded Image" width={0} height={0} />
+                <p className={s.edition}>{item.edition || "?"}</p>
+              </div>
+            )) : <div>no publication</div>}
+          </div>
+        </div> : <div className={s.lib}>
           {allBooks.map((item, index) => (
             <div key={index} className={s.book} onClick={() => getPubs(item.bid)}>
               <p>{item.bname}</p>
               <label>
                 Favorite -
-                <input type="checkbox" checked={item.followed} onClick={(e) => {
-                  e.stopPropagation();
+                <input type="checkbox" checked={item.followed} onChange={(e) => {
                   if (!item.followed) {
                     sendLike('POST', item.bid);
                   } else {
                     sendLike('DELETE', item.bid);
                   }
                   setAllBooks(books => [...books.slice(0, index), {...item, followed: !item.followed}, ...books.slice(index + 1)])
-                }}/>
+                }}
+                onClick={(e) => e.stopPropagation()}/>
               </label>
             </div>
           ))}

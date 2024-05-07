@@ -37,6 +37,8 @@ elif [ "$1" = "restart" ]; then
   sudo docker exec ${PROJECT_NAME}-app-1 bash -c "npx prisma db seed"
   echo "Restarting container..."
   sudo docker compose -p $PROJECT_NAME restart
+  # echo "Stopping container..."
+  # sudo docker container stop ${PROJECT_NAME}-app-1
   echo "Starting nextjs..."
   sudo docker exec -d ${PROJECT_NAME}-app-1 npm run start
   # echo "No need to restart..." 

@@ -125,7 +125,6 @@ async function addPublication(req: NextRequest) {
       console.log("Languages Upserted\n", result)
     }
 
-    console.log("is there?", ids.sid ? ids.sid : null)
     result = await prisma.publication.upsert({
       where: { bid_edition: {bid: ids.bid, edition: publication.edition} },
       update: {
@@ -137,8 +136,8 @@ async function addPublication(req: NextRequest) {
         cid: ids.cid ? ids.cid : null,
         year: publication.year,
         isbn: publication.isbn,
-        file: 'placeholderFile',
-        cover: 'placeholderCover',
+        file: publication.file,
+        cover: publication.cover,
       },
       create: {
         bid: ids.bid,
@@ -149,8 +148,8 @@ async function addPublication(req: NextRequest) {
         cid: ids.cid ? ids.cid : null,
         year: publication.year,
         isbn: publication.isbn,
-        file: 'placeholderFile',
-        cover: 'placeholderCover',
+        file: publication.file,
+        cover: publication.cover,
       }
     });
     ids.pid = result.pid;

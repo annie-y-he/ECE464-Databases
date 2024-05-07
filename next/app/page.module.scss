@@ -178,9 +178,11 @@
   width: 200px;
   margin: 10px;
   text-align: center;
+  border: 1px grey solid;
   cursor: pointer;
   &:hover {
     background-color: blanchedalmond;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   }
   display: flex;
   flex-direction: column;
@@ -193,6 +195,56 @@
     input {
       scale: 1.2;
       margin: 0 5px;
+    }
+  }
+
+  img {
+    width: auto;
+    height: 100%;
+    position: absolute;
+    top: 0;
+  }
+}
+
+.edition {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+}
+
+
+
+.detail {
+  button {
+    padding: 10px 20px;
+    background-color: white;
+    border: gainsboro 1px solid;
+    margin: 0 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(242, 242, 242);
+    }
+    margin-bottom: 20px;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
+}
+
+.tags {
+  width: 600px;
+  max-width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+  > * {
+    margin: 5px;
+    border: 1px gainsboro solid;
+    padding: 2px 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(242, 242, 242);
     }
   }
 }
