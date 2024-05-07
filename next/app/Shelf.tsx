@@ -24,7 +24,19 @@ export default function Shelf() {
     const body = await response.json();
     console.log(body);
   }
-
+  const getPubs = async (bid: string) => {
+    const response = await fetch( BP + '/api/book', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ bid }),
+    });
+  
+    const body = await response.json();
+    console.log(body.data)
+  }
+  
   const getUploads = async () => {
     const response = await fetch( BP + '/api/shelf/uploads', {
       method: 'POST',
@@ -69,7 +81,7 @@ export default function Shelf() {
       </div>
       <div className={s.lib}>
         {book.map((item, index) => (
-          <p key={index} className={s.book}>{item.bname}</p>
+          <div key={index} className={s.book} onClick={() => getPubs(item.bid)}>{item.bname}</div>
         ))}
       </div>
       

@@ -85,6 +85,60 @@
   bottom: 120px;
 }
 
+.search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
+  > :first-child {
+    min-width: 600px;
+    display: flex;
+  }
+  input {
+    border-radius: 20px 0 0 20px;
+    padding: 10px 20px;
+    border: gainsboro 1px solid;
+    flex-grow: 1;
+    &:focus {
+      outline: none;
+      box-shadow: inset 0 0 5px rgb(199, 199, 199);
+    }
+  }
+
+  button {
+    border-radius: 0 20px 20px 0;
+    padding: 10px 20px;
+    border: gainsboro 1px solid;
+    cursor: pointer;
+
+    &:hover {
+      background-color: gainsboro;
+    }
+  }
+}
+
+.shelf {
+  display: flex;
+  padding-top: 30px;
+  flex-direction: column;
+  align-items: center;
+
+  > :first-child {
+    width: fit-content;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: white;
+    border: gainsboro 1px solid;
+    margin: 0 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(242, 242, 242);
+    }
+  }
+}
+
 .upload {
   padding: 50px;
   label {
@@ -118,11 +172,24 @@
 }
 
 .book {
-  background-color: gray;
+  background-color: beige;
   color: black;
   height: 300px;
   width: 200px;
   margin: 10px;
   text-align: center;
-  color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: blanchedalmond;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3em 10px 10px 10px;
+  position: relative;
+  input {
+    position: absolute;
+    bottom: 30px;
+    scale: 1.5;
+  }
 }

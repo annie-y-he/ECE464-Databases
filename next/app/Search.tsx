@@ -22,16 +22,30 @@ const handler = async (obj: any, setBooks: React.Dispatch<React.SetStateAction<B
 
 export default function Search() {
   // if is admin, can edit user from search
-
+  const getPubs = async (bid: string) => {
+    const response = await fetch( BP + '/api/book', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ bid }),
+    });
+  
+    const body = await response.json();
+    console.log(body.data)
+  }
+  
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   return (
     <div className={s.search}>
-      <input type='text' onChange={(e) => setQuery(e.target.value)} value={query}/>
-      <button onClick={() => handler({query}, setBooks)}>search</button>
+      <div>
+        <input type='text' onChange={(e) => setQuery(e.target.value)} value={query}/>
+        <button onClick={() => handler({query}, setBooks)}>search</button>
+      </div>
       <div className={s.lib}>
         {books.map((item, index) => (
-          <p key={index} className={s.book}>{item.bname}</p>
+          <div key={index} className={s.book} onClick={() => getPubs(item.bid)}>{item.bname}</div>
         ))}
       </div>
     </div>

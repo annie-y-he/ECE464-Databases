@@ -23,8 +23,8 @@ elif [ "$1" = "push" ]; then
   rsync -v ./next/.env.remote admin@ec2-18-215-72-38.compute-1.amazonaws.com:/home/admin/databases/next/.env.local
   ssh admin@ec2-18-215-72-38.compute-1.amazonaws.com "cd databases && git pull && ./docker.sh restart"
 elif [ "$1" = "restart" ]; then
-  echo "Rebuilding images..."
-  sudo docker compose -p $PROJECT_NAME up -d --build
+  # echo "Rebuilding images..."
+  # sudo docker compose -p $PROJECT_NAME up -d --build
   # echo "Installing dependencies..."
   # sudo docker exec ${PROJECT_NAME}-app-1 npm install
   echo "Building the application..."

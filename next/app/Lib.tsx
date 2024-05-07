@@ -25,6 +25,9 @@ interface UpPub extends Pick<Publication, 'edition' | 'isbn'>, Pick<Series, 'sna
   year: string;
   langs: string;
 };
+interface AllBook extends Book {
+  followed: boolean;
+}
 
 const AuthorField = ({index, authors, setAuthors} : React.HTMLProps<HTMLDivElement> & {index: number; authors: UpAuth[]; setAuthors: React.Dispatch<React.SetStateAction<UpAuth[]>>}) => {
 
@@ -90,7 +93,7 @@ const nbooks = 20;
 export default function Nav() {
   const { data: token } = useSession();
   const [upload, setUpload] = useState(false);
-  const [allBooks, setAllBooks] = useState<Book[]>([])
+  const [allBooks, setAllBooks] = useState<AllBook[]>([])
   const emptyBook = {
     bname: "",
     description: "",
@@ -139,7 +142,11 @@ export default function Nav() {
     }
   };
 
-  const getBooks = async (setAllBooks: React.Dispatch<React.SetStateAction<Book[]>>) => {
+  const getBooks = async (setAllBooks: React.Dispatch<React.SetStateAction<AllBook[]>>) => {
+    const follows = await getFollows();
+    console.log(follows);
+    const followed_bid = follows.map((item: any) => item.bid)
+    console.log(followed_bid);
     const response = await fetch( BP + '/api/library', {
       method: 'POST',
       headers: {
@@ -149,8 +156,39 @@ export default function Nav() {
     });
   
     const body = await response.json();
-    setAllBooks(body.data);
+
+    const allBook = body.data.map((item: Book) => {
+      return {...item, followed: followed_bid.includes(item.bid)}
+    })
+    setAllBooks(allBook);
   }
+
+  const getFollows = async () => {
+    const response = await fetch( BP + '/api/shelf/follows', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: token }),
+    });
+  
+    const body = await response.json();
+    return body.data;
+  }
+
+  const getPubs = async (bid: string) => {
+    const response = await fetch( BP + '/api/book', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ bid }),
+    });
+  
+    const body = await response.json();
+    console.log(body.data)
+  }
+
 
   const sendLike = async (method: string, bid: string) => {
     const response = await fetch( BP + '/api/follow', {
@@ -234,20 +272,21 @@ export default function Nav() {
           </div>
         </form> : <div className={s.lib}>
           {allBooks.map((item, index) => (
-            <p key={index} className={s.book}>
-              <div>{item.bname}</div>
-              <div></div>
+            <div key={index} className={s.book} onClick={() => getPubs(item.bid)}>
+              <p>{item.bname}</p>
               <label>
                 Favorite-
-                <input type="checkbox" onClick={(e) => {
-                  if ((e.target as HTMLInputElement).checked) {
-                    sendLike('POST', item.bid)
+                <input type="checkbox" checked={item.followed} onClick={(e) => {
+                  e.stopPropagation();
+                  if (!item.followed) {
+                    sendLike('POST', item.bid);
                   } else {
-                    sendLike('DELETE', item.bid)
+                    sendLike('DELETE', item.bid);
                   }
+                  setAllBooks(books => [...books.slice(0, index), {...item, followed: !item.followed}, ...books.slice(index + 1)])
                 }}/>
               </label>
-            </p>
+            </div>
           ))}
         </div>
       }
