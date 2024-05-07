@@ -9,7 +9,6 @@ const prisma = new PrismaClient();
 
 async function addPublication(req: NextRequest) {
   const body = await req.json();
-  // The JSON blob contains information about publication, book author, series, tag, and parent objects
   let res, result;
   const { token, book, publication, authors } = body;
   // Book: bname, description, tags
@@ -45,6 +44,7 @@ async function addPublication(req: NextRequest) {
   }
 
   try {  
+    // upserts book
     result = await prisma.book.upsert({
       where: { bname: book.bname },
       update: { description: book.description },
@@ -56,6 +56,7 @@ async function addPublication(req: NextRequest) {
     ids.bid = result.bid;
     console.log("Book Upserted\n", result);
 
+    // upserts tags
     if (book.tags) {
       result = await prisma.$transaction(
         book.tags.split(',').map((t: string) => prisma.tag.upsert({
@@ -69,6 +70,7 @@ async function addPublication(req: NextRequest) {
       console.log("Tags Upserted\n", result)
     }
 
+    // upserts series
     if (publication.sname){ 
       result = await prisma.series.upsert({
         where: { sname: publication.sname },
@@ -81,6 +83,7 @@ async function addPublication(req: NextRequest) {
       console.log("Series Upserted\n", result)
     }
 
+    // upserts authors
     if (authors) {
       result = await prisma.$transaction(
         authors.map((a: any) => prisma.author.upsert({
@@ -100,6 +103,7 @@ async function addPublication(req: NextRequest) {
       console.log("Authors Upserted\n", result)
     }
 
+    // upserts publisher
     if (publication.pname){ 
       result = await prisma.publisher.upsert({
         where: { pname: publication.pname },
@@ -112,6 +116,7 @@ async function addPublication(req: NextRequest) {
       console.log("Publisher Upserted\n", result)
     }
 
+    // upserts language
     if (book.langs) {
       result = await prisma.$transaction(
         book.langs.split(',').map((l: string) => prisma.language.upsert({
@@ -125,6 +130,7 @@ async function addPublication(req: NextRequest) {
       console.log("Languages Upserted\n", result)
     }
 
+    // upserts publication
     result = await prisma.publication.upsert({
       where: { bid_edition: {bid: ids.bid, edition: publication.edition} },
       update: {
@@ -155,8 +161,10 @@ async function addPublication(req: NextRequest) {
     ids.pid = result.pid;
     console.log("Publication Upserted\n", result);
 
+    // use the generated uuid to insert relationships
     console.log("Id of Updated Fields\n", ids)
 
+    // upserts book_tag relationships
     if (ids.tid) {
       result = await prisma.$transaction(ids.tid.map(id => prisma.bookHasTag.upsert({
           where: { bid_tid: { bid: ids.bid, tid: id } },
@@ -170,6 +178,7 @@ async function addPublication(req: NextRequest) {
       console.log("Book Has Tags Upserted\n", result)
     }
 
+    // upserts author_book and author_publication relationships
     if (ids.aid) {
       result = await prisma.$transaction(ids.aid.map((id: any, index) => authors[index].wbook ? prisma.authWritesBook.upsert({
           where: { aid_bid: { aid: id, bid: ids.bid } },
@@ -196,6 +205,7 @@ async function addPublication(req: NextRequest) {
       console.log("Author Writes Upserted\n", result)
     }
 
+    // upserts publication_language relationship
     if (ids.lid) {
       result = await prisma.$transaction(ids.lid.map((id: any) => prisma.pubInLang.upsert({
           where: { pid_lid: { pid: ids.pid, lid: id } },
