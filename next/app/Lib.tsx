@@ -236,13 +236,17 @@ export default function Nav() {
           {allBooks.map((item, index) => (
             <p key={index} className={s.book}>
               <div>{item.bname}</div>
-              <input type="checkbox" onClick={(e) => {
-                if ((e.target as HTMLInputElement).checked) {
-                  sendLike('POST', item.bid)
-                } else {
-                  sendLike('DELETE', item.bid)
-                }
-              }}/>
+              <div></div>
+              <label>
+                Favorite-
+                <input type="checkbox" onClick={(e) => {
+                  if ((e.target as HTMLInputElement).checked) {
+                    sendLike('POST', item.bid)
+                  } else {
+                    sendLike('DELETE', item.bid)
+                  }
+                }}/>
+              </label>
             </p>
           ))}
         </div>
