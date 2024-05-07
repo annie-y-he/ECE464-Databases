@@ -67,7 +67,7 @@ export default function Home() {
       <div className={`${styles.flexc} ${styles.full}`}>
         <h1>Hi, {session.user.name}!</h1>
         <h2>Welcome to Solid Quality Library.</h2>
-        {/* <button onClick={handleSignOut}>Log out</button> */}
+        <button onClick={handleSignOut}>Log out</button>
       </div>
     )
   } else {
