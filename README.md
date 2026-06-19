@@ -38,6 +38,12 @@ npm run dev
 ```
 Note that `npm install` and `npx prisma generate` only need to be run once.
 
+To restore a database dump after the containers are running:
+```bash
+cat db-snapshot.sql | sudo docker exec -i sqlib-db-1 psql -v ON_ERROR_STOP=1 -U annie -d lib
+```
+`cat db-snapshot.sql` reads the dump file, `|` pipes it into Docker, `docker exec -i sqlib-db-1` runs the restore inside the database container, `psql` is the PostgreSQL client, `ON_ERROR_STOP=1` stops on restore errors, `-U annie` selects the database user, and `-d lib` selects the database.
+
 ### TECH STACK
 
 - **Next.js**: fullstack framework.
