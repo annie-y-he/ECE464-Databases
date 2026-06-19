@@ -22,6 +22,24 @@ SQLib: Solid Quality Library
 
 A platform similar to libgen where users can upload their favorite books and discover new titles from other users.
 
+### SCREENSHOTS
+
+![Add book flow](screenshots/admin-databases-all-books.png)
+
+![Intelligent Computing book page](screenshots/admin-databases-book-open-01-intelligent-computing-proceedings-of-the-2019-computing-conference.png)
+
+![The Philosophy of Time book page](screenshots/admin-databases-book-open-02-the-philosophy-of-time.png)
+
+![Introduction to Topological Manifolds book page](screenshots/admin-databases-book-open-03-introduction-to-topological-manifolds.png)
+
+![Visual Notes for Architects and Designers book page](screenshots/admin-databases-book-open-04-visual-notes-for-architects-and-designers.png)
+
+![History of Strength of Materials book page](screenshots/admin-databases-book-open-05-history-of-strength-of-materials.png)
+
+![History of Modern Architecture book page](screenshots/admin-databases-book-open-06-history-of-modern-architecture.png)
+
+![Of Other Spaces: Utopias and Heterotopias book page](screenshots/admin-databases-book-open-07-of-other-spaces-utopias-and-heterotopias.png)
+
 ### SETUP
 
 In databases repo rood directory:
